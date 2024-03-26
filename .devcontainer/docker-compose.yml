@@ -1,0 +1,79 @@
+version: '3.8'
+
+name: readme-project
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: readme-app
+    depends_on:
+      - mongodb
+      - postgresdb
+      - rabbitmq
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    ports:
+      - '8080:8080'
+
+  mongodb:
+    image: mongo:latest
+    container_name: readme-mongodb
+    restart: unless-stopped
+    volumes:
+      - mongodb-data-volume:/data/db
+    environment:
+      MONGO_DATA_DIR: /data/db
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: admin
+    ports:
+      - '27017:27017'
+      
+  postgresdb:
+    image: postgres:latest
+    container_name: readme-postgresdb
+    restart: unless-stopped
+    volumes:
+      - postgres-data-volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - '5432:5432'
+
+  rabbitmq:
+    image: rabbitmq
+    container_name: readme-rabbitmq
+    volumes:
+      - rabbitmq-data-volume:/var/lib/rabbitmq
+    ports:
+      - '5672:5672'
+
+  mailcatcher:
+    image: dockage/mailcatcher:0.9.0
+    restart: on-failure
+    ports:
+    - '1080:1080'
+    - '1025:1025'
+
+  mongo-express:
+    image: mongo-express
+    depends_on:
+      - mongodb
+    container_name: "mongo-express"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_AUTH_DATABASE: admin
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+    ports:
+      - 8081:8081
+
+volumes:
+  rabbitmq-data-volume:
+  postgres-data-volume:
+  mongodb-data-volume:
