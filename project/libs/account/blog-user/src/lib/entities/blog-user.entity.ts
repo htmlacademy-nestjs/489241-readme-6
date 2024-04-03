@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { compare, genSalt, hash } from 'bcrypt';
 
 import { Entity, StorableEntity, AuthUser, UserRole} from '@project/shared-core';
@@ -9,6 +10,8 @@ export class BlogUserEntity extends Entity implements StorableEntity<AuthUser> {
   public lastName: string;
   public dateOfBirth: Date;
   public role: UserRole;
+
+  @Exclude()
   public passwordHash: string;
 
   constructor(user?: AuthUser) {
