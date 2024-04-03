@@ -1,5 +1,8 @@
 export { Entity } from './lib/base/entity';
 
+export { EntityFactory } from './lib/interfaces/entity-factory.interface';
+export { StorableEntity } from './lib/interfaces/storable-entity.interface';
+
 export { UserRole } from './lib/account/user-role.enum';
 export { User } from './lib/account/user.interface';
 export { AuthUser } from './lib/account/auth-user.interface';
