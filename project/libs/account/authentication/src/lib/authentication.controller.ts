@@ -1,12 +1,15 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
-import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { Body, Controller, Get, HttpStatus, Param, Post } from "@nestjs/common";
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { BlogUserEntity } from "@project/blog-user";
 
 import { AuthenticationService } from "./authentication.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { LoginUserDto } from "./dto/login-user.dto";
+import { AuthenticationErrors, AuthenticationOperationDescription, AuthenticationResponseMessage } from "./authentication.constants";
+import { UserRdo } from "./rdo/user.rdo";
 
+@ApiTags('authentication')
 @Controller('auth')
 export class AuthenticationController {
   constructor (
@@ -14,31 +17,37 @@ export class AuthenticationController {
   ) {}
 
   @Post('register')
-  @ApiOperation({ summary: 'Registers user' })
+  @ApiOperation({ summary: AuthenticationOperationDescription.Register })
   @ApiCreatedResponse({
-    description: 'User has been successfully registered',
-    type: BlogUserEntity
+    description: AuthenticationResponseMessage.UserCreated,
+    type: UserRdo
   })
-  @ApiResponse({ status: 409, description: 'User already exists with such email'})
+  @ApiResponse({ status: HttpStatus.CONFLICT, description: AuthenticationErrors.AuthUserExists })
   public async register(@Body() dto: CreateUserDto) {
     const newUser = await this.authenticationService.register(dto);
     return newUser.toPOJO();
   }
 
   @Post('login')
-  @ApiOperation({ summary: 'Verifies user password' })
-  @ApiOkResponse({ description: "User verified successfully"})
-  @ApiResponse({ status: 403, description: 'Forbidden'})
-  @ApiResponse({ status: 404, description: 'User not found'})
+  @ApiOperation({ summary: AuthenticationOperationDescription.Login })
+  @ApiOkResponse({
+    description: AuthenticationResponseMessage.LoggedSuccess,
+    type: UserRdo
+  })
+  @ApiResponse({ status: HttpStatus.FORBIDDEN, description: AuthenticationResponseMessage.LoggedError })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
   public async login(@Body() dto: LoginUserDto) {
     const verifiedUser = await this.authenticationService.verifyUser(dto);
     return verifiedUser.toPOJO();
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Gets user details by id' })
-  @ApiOkResponse({ description: "User found and user details returned in body"})
-  @ApiResponse({ status: 404, description: 'User not found'})
+  @ApiOperation({ summary: AuthenticationOperationDescription.GetById })
+  @ApiOkResponse({
+    description: AuthenticationResponseMessage.UserFound,
+    type: UserRdo
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
   public async get(@Param('id') id: string) {
     const existUser = await this.authenticationService.getUser(id);
     const { passwordHash, ...data } = existUser.toPOJO();

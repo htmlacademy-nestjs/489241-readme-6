@@ -5,7 +5,7 @@ import { BlogUserRepository, BlogUserEntity } from '@project/blog-user';
 import { UserRole } from '@project/shared-core';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { AuthenticationErrors } from './authentication-errors.enum';
+import { AuthenticationErrors } from './authentication.constants';
 import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
