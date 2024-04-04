@@ -5,5 +5,6 @@ export const UserPropertiesDescription = {
   FirstName: 'User first name',
   LastName: 'User last name',
   DateOfBirth: 'User data of birth (ISO format)',
-  Avatar: 'User avatar'
+  Avatar: 'User avatar',
+  Password: 'User password'
 } as const;

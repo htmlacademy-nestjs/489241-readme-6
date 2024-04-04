@@ -1,32 +1,37 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { UserPropertiesDescription } from "../rdo/user.constants";
 
 export class CreateUserDto {
   @ApiProperty({
-    description: 'User Email',
+    description: UserPropertiesDescription.Email,
     required: true,
+    example: 'john.doe@noname.corp'
   })
   public email: string;
 
   @ApiProperty({
-    description: 'User Date of Birth',
+    description: UserPropertiesDescription.DateOfBirth,
     required: true,
+    example: '1981-01-30'
   })
   public dateBirth: string;
 
   @ApiProperty({
-    description: 'User First Name',
+    description: UserPropertiesDescription.FirstName,
     required: true,
+    example: 'John'
   })
   public firstName: string;
 
   @ApiProperty({
-    description: 'User Last Name',
+    description: UserPropertiesDescription.LastName,
     required: true,
+    example: 'Doe'
   })
   public lastName: string;
 
   @ApiProperty({
-    description: 'User Password',
+    description: UserPropertiesDescription.Password,
     required: true,
   })
   public password: string;
