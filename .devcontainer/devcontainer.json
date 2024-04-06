@@ -20,7 +20,8 @@
 				"gruntfuggly.todo-tree",
 				"mongodb.mongodb-vscode",
 				"mtxr.sqltools",
-				"mtxr.sqltools-driver-pg"
+				"mtxr.sqltools-driver-pg",
+        		"humao.rest-client"
 			]
 		}
 	}
