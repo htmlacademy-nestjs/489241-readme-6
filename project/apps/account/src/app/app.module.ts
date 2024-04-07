@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 
 import { BlogUserModule } from '@project/blog-user';
 import { AuthenticationModule } from '@project/authentication';
+import { AccountConfigurationModule } from '@project/account-configuration';
 
 @Module({
   imports: [
     BlogUserModule,
-    AuthenticationModule
+    AuthenticationModule,
+    AccountConfigurationModule
   ],
   controllers: [],
   providers: [],
