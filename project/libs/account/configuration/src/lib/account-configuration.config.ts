@@ -11,7 +11,7 @@ export interface AccountConfiguration {
 
 async function getAccountConfig(): Promise<AccountEnvironmentConfiguration> {
   const config = plainToClass(AccountEnvironmentConfiguration, {
-    environment: process.env.ACCOUNT_PORT,
+    environment: process.env.ACCOUNT_ENVIRONMENT,
     port: process.env.ACCOUNT_PORT ? parseInt(process.env.ACCOUNT_PORT, 10) : DEFAULT_ACCOUNT_PORT
   });
 

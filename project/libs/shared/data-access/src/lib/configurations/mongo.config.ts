@@ -4,7 +4,7 @@ import { plainToClass } from 'class-transformer';
 import { DEFAULT_MONGO_PORT } from './mongo.const';
 import { MongoEnvironmentConfiguration } from './mongo.env';
 
-export interface MongoConfig {
+export interface MongoConfiguration {
   host: string;
   name: string;
   port: number;
