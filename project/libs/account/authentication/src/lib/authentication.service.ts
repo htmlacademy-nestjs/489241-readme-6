@@ -8,15 +8,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { AuthenticationErrors } from './authentication.constants';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ConfigType } from '@nestjs/config';
-import { dbConfig } from '@project/data-access';
+import { mongoConfig } from '@project/data-access';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     private readonly blogUserRepository: BlogUserRepository,
 
-    @Inject(dbConfig.KEY)
-    private readonly databaseConfig: ConfigType<typeof dbConfig>
+    @Inject(mongoConfig.KEY)
+    private readonly databaseConfig: ConfigType<typeof mongoConfig>
   ) {
     console.log(databaseConfig.port);
   }
