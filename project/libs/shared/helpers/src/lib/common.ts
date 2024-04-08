@@ -26,7 +26,7 @@ export function fillDto<T, V extends PlainObject>(
 }
 
 export function getMongoConnectionString({username, password, host, port, databaseName, authDatabase}): string {
-  const v = `mongodb://${username}:${password}@${host}:${port}/?authSource=${authDatabase}`;
+  const v = `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
   console.log(v);
   return v;
 }
