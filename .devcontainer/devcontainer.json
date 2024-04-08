@@ -2,8 +2,11 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node-mongo
 {
 	"name": "Html Academy - NestJs",
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
+	"dockerComposeFile": [
+    "../project/docker-compose.yml",
+    "./docker-compose.workspace.yml"
+  ],
+	"service": "workspace",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
 		"ghcr.io/devcontainers-contrib/features/nestjs-cli:2": {},
@@ -21,15 +24,16 @@
 				"mongodb.mongodb-vscode",
 				"mtxr.sqltools",
 				"mtxr.sqltools-driver-pg",
-        "humao.rest-client"
+				"humao.rest-client",
+        "ms-azuretools.vscode-docker"
 			]
 		}
-	}
+	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	//"forwardPorts": [8080, 5432]
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "yarn install",
+	"postCreateCommand": "npm install -g --save-dev webpack-cli"
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"

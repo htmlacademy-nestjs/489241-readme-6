@@ -1,0 +1,20 @@
+version: '3.8'
+
+name: readme-project
+services:
+  workspace:
+    build:
+      context: .
+      dockerfile: ../.devcontainer/Dockerfile
+    container_name: readme-workspace
+    depends_on:
+      - mongodb
+      - postgresdb
+      - rabbitmq
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    ports:
+      - '8080:8080'
+    env_file:
+      - ../.devcontainer/devcontainer.env

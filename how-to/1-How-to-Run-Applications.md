@@ -26,3 +26,9 @@
 * В открывшемся меню нажмите на "Reopen in container", как показано ниже
 
 ![Open in Container](../images/06-vscode-reopen-in-container.png)
+
+# Запуск через Docker Compose
+
+1. Открыть в терминале папке с проекта
+2. Перейти в папке `project`
+3. Выполнить комманду `docker compose up --file ./docker-compose.yml --env-file .env-example up -d`
