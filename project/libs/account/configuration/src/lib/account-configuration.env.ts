@@ -1,4 +1,4 @@
-import { IsEnum, IsNumber, IsNotEmpty, IsOptional, IsString, Max, Min, validateOrReject } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString, Max, Min, validateOrReject } from 'class-validator';
 
 import { Environments } from '@project/shared-core';
 import { MIN_PORT, MAX_PORT, DEFAULT_ACCOUNT_PORT, AccountConfigurationErrors } from './account-configuration.const';
