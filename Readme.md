@@ -10,6 +10,16 @@ _`.editorconfig`, `.gitattributes`, `.gitignore`._
 
 ---
 
+## Как запустить в Dev Container (быстрый выриант)
+
+[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/htmlacademy-nestjs/489241-readme-6)
+
+☝️ Нажать на "DevContainers Open" ☝️
+
+![Run in Dev Container](./images/01-run-in-dev-container.png)
+
+Более детально про другие варианты запуска приложений тут [How to Run Applications](./how-to/1-How-to-Run-Applications.md)
+
 ## Памятка
 
 ### 1. Зарегистрируйтесь на Гитхабе
