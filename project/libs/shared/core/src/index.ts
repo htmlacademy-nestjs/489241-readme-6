@@ -15,5 +15,6 @@ export { QuotePost } from './lib/blog/quote-post.interface';
 export { PhotoPost } from './lib/blog/photo-post.interface';
 export { LinkPost } from './lib/blog/link-post.interface';
 export { Comment } from './lib/blog/comment.interface';
+export { Category } from './lib/blog/category.interface';
 
 export { Environments } from './lib/environments.enum';
