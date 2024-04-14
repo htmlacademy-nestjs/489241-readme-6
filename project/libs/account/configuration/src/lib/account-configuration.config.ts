@@ -1,7 +1,7 @@
 import { ConfigType, registerAs } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
 
-import { DEFAULT_ACCOUNT_PORT } from './account-configuration.const';
+import { AccountConfigurationPorts } from './account-configuration.const';
 import { AccountEnvironmentConfiguration } from './account-configuration.env';
 
 export interface AccountConfiguration {
@@ -12,7 +12,7 @@ export interface AccountConfiguration {
 async function getAccountConfig(): Promise<AccountEnvironmentConfiguration> {
   const config = plainToClass(AccountEnvironmentConfiguration, {
     environment: process.env.ACCOUNT_ENVIRONMENT,
-    port: process.env.ACCOUNT_PORT ? parseInt(process.env.ACCOUNT_PORT, 10) : DEFAULT_ACCOUNT_PORT
+    port: process.env.ACCOUNT_PORT ? parseInt(process.env.ACCOUNT_PORT, 10) : AccountConfigurationPorts.DEFAULT_ACCOUNT_PORT
   });
 
   await config.validate();

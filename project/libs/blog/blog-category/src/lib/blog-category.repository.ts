@@ -7,8 +7,7 @@ import { BasePostgresRepository } from '@project/data-access';
 import { BlogCategoryEntity } from './blog-category.entity';
 import { BlogCategoryFactory } from './blog-category.factory';
 import { CategoryFilter, categoryFilterToPrismaFilter } from './blog-category.filter';
-
-export const MAX_CATEGORY_LIMIT = 10;
+import { MAX_CATEGORY_LIMIT } from './blog-category.constants';
 
 @Injectable()
 export class BlogCategoryRepository extends BasePostgresRepository<BlogCategoryEntity, Category> {
