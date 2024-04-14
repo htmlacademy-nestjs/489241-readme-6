@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Param, Post } from "@nestjs/common";
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
-import { BlogUserEntity } from "@project/blog-user";
+import { fillDto } from '@project/shared-helpers';
 
 import { AuthenticationService } from "./authentication.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -25,7 +25,7 @@ export class AuthenticationController {
   @ApiResponse({ status: HttpStatus.CONFLICT, description: AuthenticationErrors.AuthUserExists })
   public async register(@Body() dto: CreateUserDto) {
     const newUser = await this.authenticationService.register(dto);
-    return newUser.toPOJO();
+    return fillDto(UserRdo, newUser.toPOJO());
   }
 
   @Post('login')
@@ -38,7 +38,7 @@ export class AuthenticationController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
   public async login(@Body() dto: LoginUserDto) {
     const verifiedUser = await this.authenticationService.verifyUser(dto);
-    return verifiedUser.toPOJO();
+    return fillDto(UserRdo, verifiedUser.toPOJO());
   }
 
   @Get(':id')
@@ -50,7 +50,6 @@ export class AuthenticationController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
   public async get(@Param('id') id: string) {
     const existUser = await this.authenticationService.getUser(id);
-    const { passwordHash, ...data } = existUser.toPOJO();
-    return data;
+    return fillDto(UserRdo, existUser.toPOJO());
   }
 }
