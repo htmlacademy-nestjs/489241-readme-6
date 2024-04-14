@@ -5,7 +5,7 @@ services:
   mongodb:
     image: mongo:latest
     container_name: readme-mongodb
-    restart: unless-stopped
+    restart: always
     volumes:
       - mongodb-data-volume:/data/db
     environment:
@@ -19,7 +19,7 @@ services:
   postgresdb:
     image: postgres:latest
     container_name: readme-postgresdb
-    restart: unless-stopped
+    restart: always
     volumes:
       - postgres-data-volume:/var/lib/postgresql/data
     environment:
@@ -32,6 +32,7 @@ services:
   rabbitmq:
     image: rabbitmq
     container_name: readme-rabbitmq
+    restart: always
     volumes:
       - rabbitmq-data-volume:/var/lib/rabbitmq
     ports:
@@ -39,7 +40,7 @@ services:
 
   mailcatcher:
     image: dockage/mailcatcher:0.9.0
-    restart: on-failure
+    restart: always
     ports:
     - '1080:1080'
     - '1025:1025'
@@ -49,6 +50,7 @@ services:
     depends_on:
       - mongodb
     container_name: readme-mongo-express
+    restart: always
     environment:
       ME_CONFIG_MONGODB_SERVER: mongodb
       ME_CONFIG_MONGODB_PORT: ${MONGO_PORT}
@@ -58,9 +60,24 @@ services:
       ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_USER}
       ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_PASSWORD}
     ports:
-      - 8081:8081
+      - '8081:8081'
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgresdb
+    container_name: readme-pgadmin4
+    restart: always
+    ports:
+      - '8082:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PG_ADMIN_USER}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_ADMIN_PASSWORD}
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
 
 volumes:
   rabbitmq-data-volume:
   postgres-data-volume:
   mongodb-data-volume:
+  pgadmin-data:
