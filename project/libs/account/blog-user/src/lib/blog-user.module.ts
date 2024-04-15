@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { BlogUserFactory } from './entities/blog-user.factory';
 import { BlogUserRepository } from './entities/blog-user.repository';
-import { MongooseModule } from '@nestjs/mongoose';
 import { BlogUserModel, BlogUserSchema } from './models/blog-user.model';
 
 @Module({
