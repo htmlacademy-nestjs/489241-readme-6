@@ -1,6 +1,6 @@
 import { IsNumber, IsOptional, IsString, Max, Min, validateOrReject } from 'class-validator';
 
-import { MIN_PORT, MAX_PORT, DEFAULT_MONGO_PORT, MongoConfigurationErrors } from './mongo.const';
+import { MongoConfigurationPorts, MongoConfigurationErrors } from './mongo.const';
 
 export class MongoEnvironmentConfiguration {
   @IsString({ message: MongoConfigurationErrors.DatabaseNameRequired })
@@ -10,10 +10,10 @@ export class MongoEnvironmentConfiguration {
   public host: string;
 
   @IsNumber({}, { message: MongoConfigurationErrors.PortRequired })
-  @Min(MIN_PORT)
-  @Max(MAX_PORT)
+  @Min(MongoConfigurationPorts.MIN_PORT)
+  @Max(MongoConfigurationPorts.MAX_PORT)
   @IsOptional()
-  public port: number = DEFAULT_MONGO_PORT;
+  public port: number = MongoConfigurationPorts.DEFAULT_MONGO_PORT;
 
   @IsString({ message: MongoConfigurationErrors.UserRequired })
   public user: string;

@@ -31,4 +31,5 @@
 
 1. Открыть в терминале папке с проекта
 2. Перейти в папке `project`
-3. Выполнить комманду `docker compose up --file ./docker-compose.yml --env-file .env-example up -d`
+3. Выполнить комманду `sudo docker compose --env-file "./.env-example" --file "./docker-compose.yml" up -d`
+5. Займет какое-то время прежде чем он запустит все службы и БДых
