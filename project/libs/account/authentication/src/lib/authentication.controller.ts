@@ -2,6 +2,7 @@ import { Body, Controller, Get, HttpStatus, Param, Post } from "@nestjs/common";
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { fillDto } from '@project/shared-helpers';
+import { MongoIdValidationPipe } from '@project/pipes';
 
 import { AuthenticationService } from "./authentication.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -48,7 +49,7 @@ export class AuthenticationController {
     type: UserRdo
   })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
-  public async get(@Param('id') id: string) {
+  public async get(@Param('id', MongoIdValidationPipe) id: string) {
     const existUser = await this.authenticationService.getUser(id);
     return fillDto(UserRdo, existUser.toPOJO());
   }
