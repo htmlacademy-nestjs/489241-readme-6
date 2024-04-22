@@ -8,3 +8,9 @@ export enum UserPropertiesDescription {
   Avatar = 'User avatar',
   Password = 'User password'
 }
+
+export enum UserPropertiesValidationErrors {
+  EmailNotValid = 'The email is not valid',
+  DateBirthNotValid = 'The user date birth is not valid',
+  MinLength = 'At least two characters are required'
+}
