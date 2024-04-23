@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output = "../../../../node_modules/.prisma/client"
+  output   = "../../../../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -25,6 +25,8 @@ model Post {
   userId      String     @map("user_id")
   comments    Comment[]
   favorite    Favorite[]
+  state       PostState  @default(Draft)
+  type        PostType   @default(Text)
 
   @@index([title])
   @@map("posts")
@@ -63,4 +65,17 @@ model Favorite {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("favorites")
+}
+
+enum PostState {
+  Draft
+  Published
+}
+
+enum PostType {
+  Video
+  Text
+  Quote
+  Photo
+  Link
 }

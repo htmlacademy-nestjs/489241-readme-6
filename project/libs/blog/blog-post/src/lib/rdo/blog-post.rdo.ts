@@ -1,8 +1,10 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 
 import { CategoryRdo } from '@project/blog-category';
-import { ApiProperty } from '@nestjs/swagger';
-import { BlogPostPropertiesDescription } from '../blog-post.constants';
+
+import { BlogPostPropertiesDescription, BlogPostValidationMessages } from '../blog-post.constants';
+import { IsMongoId } from 'class-validator';
 
 export class BlogPostRdo {
 
@@ -46,18 +48,23 @@ export class BlogPostRdo {
     description: BlogPostPropertiesDescription.UserId,
     example: '661d57550ef8e7344a0a3d67'
   })
+  @IsMongoId({ message: BlogPostValidationMessages.InvalidUserId })
   public userId: string;
 
   @Expose()
   @Type(() => CategoryRdo)
   @ApiProperty({
     description: BlogPostPropertiesDescription.Categories,
+    example: [],
+    isArray: true
   })
   public categories: CategoryRdo[];
 
   @Expose()
   @ApiProperty({
     description: BlogPostPropertiesDescription.Comments,
+    example: [],
+    isArray: true
   })
   public comments: Comment[]
 }

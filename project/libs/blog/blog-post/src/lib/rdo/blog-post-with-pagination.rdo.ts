@@ -1,8 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
 import { BlogPostRdo } from './blog-post.rdo';
 import { BlogPostsWithPagingPropertiesDescription } from '../blog-post.constants';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class BlogPostWithPaginationRdo {
   @Expose()

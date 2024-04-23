@@ -6,7 +6,12 @@ export enum BlogPostPropertiesDescription {
   UserId = 'The blog post author id',
   Categories = 'The blog post categories list',
   Comments = 'The blog post recent comments',
-  CreateAt = 'The blog post creation date'
+  CreateAt = 'The blog post creation date',
+  PostType = 'The blog post type (text, video, link and etc.)',
+  QueryLimit = 'Page size',
+  QueryCategories = 'Array of blog categories to filter by',
+  QuerySortDirection = 'Sort direction',
+  QueryPageNumber = "Page number"
 }
 
 export enum BlogPostsWithPagingPropertiesDescription {
@@ -24,4 +29,27 @@ export enum BlogPostValidationMessages {
   InvalidUserId = 'Invalid user id',
   CategoriesNotSpecified = 'The blog post categories are not specified',
   InvalidUUID = 'Invalid GUID'
+}
+
+export enum BlogPostQueryDefaults {
+  DefaultCountLimit = 10,
+  DefaultPageCount = 1,
+}
+
+export enum BlogPostOperationDescription {
+  ShowBlogPostById = 'Gets blog post details by id',
+  CreateBlogPost = 'Creates blog post',
+  SearchBlogPosts = 'Searches blog posts based on search criteria',
+  DeleteBlogPostById = 'Deletes blog post by specified id',
+  UpdateBlogPostById = 'Updates blog post by specified id'
+}
+
+export enum BlogPostResponseMessage {
+  ShowBlogPostById = 'Returned blog post details in response body',
+  CreatedBlogPost = 'Returns created blog post details in response body',
+  SearchBlogPosts = 'Returns search results in response body'
+}
+
+export enum BlogPostResponseError {
+  BlogNotFound = 'Blog post not found'
 }

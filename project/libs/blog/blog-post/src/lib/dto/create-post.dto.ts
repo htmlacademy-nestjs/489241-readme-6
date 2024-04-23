@@ -7,6 +7,9 @@ import {
   IsString,
   IsUUID
 } from 'class-validator';
+
+import { PostTypeValues } from '@project/shared-core';
+
 import { BlogPostPropertiesDescription, BlogPostValidationMessages } from '../blog-post.constants';
 
 export class CreatePostDto {
@@ -56,4 +59,11 @@ export class CreatePostDto {
   @IsArray()
   @ArrayNotEmpty({ message: BlogPostValidationMessages.CategoriesNotSpecified })
   public categories: string[];
+
+  @ApiProperty({
+    description: BlogPostPropertiesDescription.PostType,
+    example: 'Text',
+    required: true,
+  })
+  public type: PostTypeValues;
 }

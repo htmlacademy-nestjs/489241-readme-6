@@ -1,5 +1,5 @@
 import { BlogCategoryEntity, BlogCategoryFactory } from '@project/blog-category';
-import { Entity, Post, PostState, PostType, StorableEntity } from '@project/shared-core';
+import { Entity, Post, PostStateValues, PostTypeValues, StorableEntity } from '@project/shared-core';
 import { BlogCommentEntity, BlogCommentFactory } from '@project/blog-comment';
 
 export class BlogPostEntity extends Entity implements StorableEntity<Post> {
@@ -11,8 +11,8 @@ export class BlogPostEntity extends Entity implements StorableEntity<Post> {
   public updatedAt?: Date;
   public userId: string;
   public comments: BlogCommentEntity[];
-  public state: PostState;
-  public type: PostType;
+  public state: PostStateValues;
+  public type: PostTypeValues;
 
   constructor(post?: Post) {
     super();
