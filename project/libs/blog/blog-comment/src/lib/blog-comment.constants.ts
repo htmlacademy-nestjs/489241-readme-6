@@ -1,11 +1,11 @@
 export enum BlogCommentValidationMessages {
   TextIsEmpty = 'The comment text is empty',
-  InvalidID = 'Invalid author id',
+  InvalidId = 'Invalid author id',
 }
 
 export enum CommentPropertiesDescription {
   PostId = 'Blog post unique id',
-  Text = 'Blog comment text',
+  Message = 'Blog comment text',
   UserId = 'Blog comment user id',
   CreatedAt = 'Blog comment creation date'
 }

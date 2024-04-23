@@ -16,5 +16,7 @@ export { PhotoPost } from './lib/blog/photo-post.interface';
 export { LinkPost } from './lib/blog/link-post.interface';
 export { Comment } from './lib/blog/comment.interface';
 export { Category } from './lib/blog/category.interface';
+export { PaginationResult } from './lib/interfaces/pagination-result.interface';
+export { SortDirection } from './lib/base/sort-direction.enum';
 
 export { Environments } from './lib/environments.enum';
