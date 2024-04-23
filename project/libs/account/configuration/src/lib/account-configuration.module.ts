@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { mongoConfig } from '@project/data-access';
 
 import accountApplicationConfig from './account-configuration.config'
+import jwtConfig from './jwt.config'
 
 const ENV_USERS_FILE_PATH = 'apps/account/account.env';
 
@@ -12,7 +13,7 @@ const ENV_USERS_FILE_PATH = 'apps/account/account.env';
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-      load: [accountApplicationConfig, mongoConfig],
+      load: [accountApplicationConfig, jwtConfig, mongoConfig],
       envFilePath: ENV_USERS_FILE_PATH
     }),
   ]

@@ -8,4 +8,6 @@ export enum AccountConfigurationErrors {
   EnvironmentRequired = 'Account environment is required',
   EnvironmentIsIncorrect = 'Account environment is not correct',
   PortRequired = 'Account port is required',
+  AccessTokenSecretRequired = 'Access Token Secret is required',
+  AccessTokenExpiresInIsRequired = 'Access Token expiration is required'
 }
