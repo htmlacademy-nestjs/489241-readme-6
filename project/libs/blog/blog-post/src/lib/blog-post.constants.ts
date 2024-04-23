@@ -41,13 +41,15 @@ export enum BlogPostOperationDescription {
   CreateBlogPost = 'Creates blog post',
   SearchBlogPosts = 'Searches blog posts based on search criteria',
   DeleteBlogPostById = 'Deletes blog post by specified id',
-  UpdateBlogPostById = 'Updates blog post by specified id'
+  UpdateBlogPostById = 'Updates blog post by specified id',
+  CreateCommentForBlogId = 'Creates blog post comment for specified blog post id',
 }
 
 export enum BlogPostResponseMessage {
   ShowBlogPostById = 'Returned blog post details in response body',
   CreatedBlogPost = 'Returns created blog post details in response body',
-  SearchBlogPosts = 'Returns search results in response body'
+  SearchBlogPosts = 'Returns search results in response body',
+  CreateCommentForBlogId = 'Blog comment was created and details returned in response body',
 }
 
 export enum BlogPostResponseError {

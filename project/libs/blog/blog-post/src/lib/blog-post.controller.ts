@@ -14,6 +14,7 @@ import {
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { fillDto } from '@project/shared-helpers';
+import { CommentRdo, CreateCommentDto } from '@project/blog-comment';
 
 import { BlogPostService } from './blog-post.service';
 import { BlogPostRdo } from './rdo/blog-post.rdo';
@@ -83,5 +84,17 @@ export class BlogPostController {
   public async update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdatePostDto) {
     const updatedPost = await this.blogPostService.updatePost(id, dto);
     return fillDto(BlogPostRdo, updatedPost.toPOJO());
+  }
+
+  @Post('/:postId/comments')
+  @ApiOperation({ summary: BlogPostOperationDescription.CreateCommentForBlogId })
+  @ApiCreatedResponse({
+    description: BlogPostResponseMessage.CreateCommentForBlogId,
+    type: CommentRdo,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: BlogPostResponseError.BlogNotFound })
+  public async createComment(@Param('postId', ParseUUIDPipe) postId: string, @Body() dto: CreateCommentDto) {
+    const newComment = await this.blogPostService.addComment(postId, dto);
+    return fillDto(CommentRdo, newComment.toPOJO());
   }
 }

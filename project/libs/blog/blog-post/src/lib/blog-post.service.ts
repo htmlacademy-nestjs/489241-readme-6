@@ -9,12 +9,16 @@ import { BlogPostEntity } from './blog-post.entity';
 import { BlogPostQuery } from './dto/blog-post.query';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { BlogPostFactory } from './blog-post.factory';
+import { BlogPostResponseError } from './blog-post.constants';
+import { BlogCommentEntity, BlogCommentFactory, BlogCommentRepository, CreateCommentDto } from '@project/blog-comment';
 
 @Injectable()
 export class BlogPostService {
   constructor(
     private readonly blogPostRepository: BlogPostRepository,
     private readonly blogCategoryService: BlogCategoryService,
+    private readonly blogCommentRepository: BlogCommentRepository,
+    private readonly blogCommentFactory: BlogCommentFactory,
   ) {}
 
   public async getAllPosts(query?: BlogPostQuery): Promise<PaginationResult<BlogPostEntity>> {
@@ -70,5 +74,17 @@ export class BlogPostService {
     await this.blogPostRepository.update(existsPost);
 
     return existsPost;
+  }
+
+  public async addComment(postId: string, dto: CreateCommentDto): Promise<BlogCommentEntity> {
+    const existsPost = await this.getPost(postId);
+    if (!existsPost) {
+      throw new NotFoundException(BlogPostResponseError.BlogNotFound);
+    }
+
+    const newComment = this.blogCommentFactory.createFromDto(dto, existsPost.id);
+    await this.blogCommentRepository.save(newComment);
+
+    return newComment;
   }
 }

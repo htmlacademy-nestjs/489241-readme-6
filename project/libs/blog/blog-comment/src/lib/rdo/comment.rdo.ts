@@ -16,7 +16,7 @@ export class CommentRdo {
     description: CommentPropertiesDescription.Message,
     example: 'Nice blog!'
   })
-  public text: string;
+  public message: string;
 
   @Expose()
   @ApiProperty({

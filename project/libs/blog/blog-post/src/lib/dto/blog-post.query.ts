@@ -22,7 +22,7 @@ export class BlogPostQuery {
   @IsOptional()
   @ApiProperty({
     description: BlogPostPropertiesDescription.QueryCategories,
-    example: ['79cc980c-3e48-4598-8607-0a29f0a837cf'],
+    example: [],
     required: false,
     isArray: true
   })
@@ -41,8 +41,7 @@ export class BlogPostQuery {
   @IsOptional()
   @ApiProperty({
     description: BlogPostPropertiesDescription.QueryPageNumber,
-    example: SortDirection.Desc,
-    type: SortDirection
+    example: 1,
   })
   public page: number = BlogPostQueryDefaults.DefaultPageCount;
 }
