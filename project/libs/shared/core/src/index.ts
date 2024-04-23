@@ -7,6 +7,7 @@ export { UserRole } from './lib/account/user-role.enum';
 export { User } from './lib/account/user.interface';
 export { AuthUser } from './lib/account/auth-user.interface';
 
+export { Post } from './lib/blog/post.interface';
 export { PostState } from './lib/blog/post-state.enum';
 export { PostType } from './lib/blog/post-type.enum';
 export { VideoPost } from './lib/blog/video-post.interface';
