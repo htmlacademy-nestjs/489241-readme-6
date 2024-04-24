@@ -41,6 +41,7 @@ export class CreateUserDto {
   @ApiProperty({
     description: UserPropertiesDescription.Password,
     required: true,
+    example: 'secret password!'
   })
   @IsString()
   public password: string;

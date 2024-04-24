@@ -13,7 +13,7 @@ Content-Type: application/json
 ###
 
 # Get user by ID
-GET http://localhost:3000/api/auth/13706a19-d713-4db3-b0d5-37506de4d2e9 HTTP/1.1
+GET http://localhost:3000/api/auth/662828f97b32ec683e9ebf8c HTTP/1.1
 
 ###
 
@@ -33,3 +33,13 @@ Content-Type: application/json
 ### User protected URL with access token
 GET http://localhost:3000/api/auth/demo/1
 Authorization: Bearer {{access_token}}
+
+### Change password
+POST http://localhost:3000/api/auth/change-password HTTP/1.1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "password": "password!123",
+  "newPassword": "password!1234"
+}

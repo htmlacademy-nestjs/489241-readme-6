@@ -6,7 +6,8 @@ export enum UserPropertiesDescription {
   LastName = 'User last name',
   DateOfBirth = 'User data of birth (ISO format)',
   Avatar = 'User avatar',
-  Password = 'User password'
+  Password = 'User password',
+  NewPassword = 'New user password'
 }
 
 export enum UserPropertiesValidationErrors {

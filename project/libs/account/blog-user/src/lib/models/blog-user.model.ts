@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, SchemaTypes, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AuthUser, UserRole } from '@project/shared-core';
 
@@ -43,6 +43,11 @@ export class BlogUserModel extends Document implements AuthUser {
     default: UserRole.User,
   })
   public role: UserRole;
+
+  @Prop({
+    type: SchemaTypes.ObjectId
+  })
+  _id: Types.ObjectId;
 }
 
 export const BlogUserSchema = SchemaFactory.createForClass(BlogUserModel);

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post, UseGuards, Request } from "@nestjs/common";
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { fillDto } from '@project/shared-helpers';
@@ -11,6 +11,7 @@ import { AuthenticationErrors, AuthenticationOperationDescription, Authenticatio
 import { UserRdo } from "./rdo/user.rdo";
 import { LoggedUserRdo } from "./rdo/logged-user.rdo";
 import { JwtAuthGuard } from "./guards/jwt-auth.guard";
+import { ChangePasswordDto } from "./dto/change-password.dto";
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -58,8 +59,16 @@ export class AuthenticationController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/demo/:id')
-  public async demoPipe(@Param('id') id: number) {
-    console.log(typeof id);
+  @Post('change-password')
+  @ApiOperation({ summary: AuthenticationOperationDescription.ChangeUserPassword })
+  @ApiOkResponse({
+    description: AuthenticationResponseMessage.PasswordUpdated,
+    type: LoggedUserRdo
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
+  public async changePassword(@Body() dto: ChangePasswordDto, @Request() req) {
+    const changedUser = await this.authenticationService.changePassword(dto, req.user.email);
+    const userToken = await this.authenticationService.createUserToken(changedUser);
+    return fillDto(LoggedUserRdo, { ...changedUser.toPOJO(), ...userToken });
   }
 }

@@ -10,6 +10,7 @@ import { Token, TokenPayload, User, UserRole } from '@project/shared-core';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthenticationErrors } from './authentication.constants';
 import { LoginUserDto } from './dto/login-user.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 
 @Injectable()
@@ -95,5 +96,23 @@ export class AuthenticationService {
       this.logger.error('[Token generation error]: ' + error.message);
       throw new HttpException('Token generation error.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  public async changePassword(dto: ChangePasswordDto, currentUserEmail: string): Promise<BlogUserEntity> {
+
+    const existUser = await this.blogUserRepository.findByEmail(currentUserEmail);
+    if (!existUser) {
+      throw new NotFoundException(AuthenticationErrors.UserNotFound);
+    }
+
+    if (!await existUser.comparePassword(dto.password)) {
+      throw new UnauthorizedException(AuthenticationErrors.WrongPassword);
+    }
+
+    const userEntity = await new BlogUserEntity(existUser)
+      .setPassword(dto.newPassword);
+
+    await this.blogUserRepository.update(userEntity);
+    return userEntity;
   }
 }
