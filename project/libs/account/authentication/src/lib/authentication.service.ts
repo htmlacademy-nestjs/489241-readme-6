@@ -37,7 +37,8 @@ export class AuthenticationService {
       dateOfBirth: dayjs(dateBirth).toDate(),
       role: UserRole.User,
       avatarImage: '',
-      passwordHash: ''
+      passwordHash: '',
+      registrationDate: dayjs().toDate()
     };
 
     const existUser = await this.blogUserRepository

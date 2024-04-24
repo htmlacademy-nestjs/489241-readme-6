@@ -24,6 +24,13 @@ export class UserRdo {
   public dateOfBirth: string;
 
   @ApiProperty({
+    description: UserPropertiesDescription.RegistrationDate,
+    example: '1981-01-30'
+  })
+  @Expose()
+  public registrationDate: string;
+
+  @ApiProperty({
     description: UserPropertiesDescription.Email,
     example: 'john.doe@noname.corp'
   })

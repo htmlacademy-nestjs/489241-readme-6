@@ -17,6 +17,11 @@ export class BlogUserModel extends Document implements AuthUser {
 
   @Prop({
     required: true,
+  })
+  public registrationDate: Date;
+
+  @Prop({
+    required: true,
     unique: true,
   })
   public email: string;
@@ -43,11 +48,6 @@ export class BlogUserModel extends Document implements AuthUser {
     default: UserRole.User,
   })
   public role: UserRole;
-
-  @Prop({
-    type: SchemaTypes.ObjectId
-  })
-  _id: Types.ObjectId;
 }
 
 export const BlogUserSchema = SchemaFactory.createForClass(BlogUserModel);

@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString } from 'class-validator';
+import { IsString, MaxLength, MinLength } from 'class-validator';
 
-import { UserPropertiesDescription } from "../rdo/user.constants";
+import { UserPropertiesDescription, UserPropertiesValidationErrors } from "../rdo/user.constants";
 
 export class ChangePasswordDto {
   @ApiProperty({
@@ -10,6 +10,8 @@ export class ChangePasswordDto {
     example: 'secret password!'
   })
   @IsString()
+  @MinLength(6, { message: UserPropertiesValidationErrors.MinPasswordLength })
+  @MaxLength(12, { message: UserPropertiesValidationErrors.MaxPasswordLength })
   public password: string;
 
   @ApiProperty({
@@ -18,5 +20,7 @@ export class ChangePasswordDto {
     example: 'secret password!'
   })
   @IsString()
+  @MinLength(6, { message: UserPropertiesValidationErrors.MinPasswordLength })
+  @MaxLength(12, { message: UserPropertiesValidationErrors.MaxPasswordLength })
   public newPassword: string;
 }
