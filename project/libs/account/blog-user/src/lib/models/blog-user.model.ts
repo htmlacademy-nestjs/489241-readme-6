@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, SchemaTypes, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AuthUser, UserRole } from '@project/shared-core';
 
@@ -14,6 +14,11 @@ export class BlogUserModel extends Document implements AuthUser {
     required: true,
   })
   public dateOfBirth: Date;
+
+  @Prop({
+    required: true,
+  })
+  public registrationDate: Date;
 
   @Prop({
     required: true,

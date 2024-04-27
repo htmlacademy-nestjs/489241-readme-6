@@ -1,22 +1,29 @@
 import dayjs from 'dayjs';
-import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
+import { mongoConfig } from '@project/data-access';
+import { JwtService } from '@nestjs/jwt';
+import { ConflictException, HttpException, HttpStatus, Inject, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { BlogUserRepository, BlogUserEntity } from '@project/blog-user';
-import { UserRole } from '@project/shared-core';
+import { Token, TokenPayload, User, UserRole } from '@project/shared-core';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthenticationErrors } from './authentication.constants';
 import { LoginUserDto } from './dto/login-user.dto';
-import { ConfigType } from '@nestjs/config';
-import { mongoConfig } from '@project/data-access';
+import { ChangePasswordDto } from './dto/change-password.dto';
+
 
 @Injectable()
 export class AuthenticationService {
+  private readonly logger = new Logger(AuthenticationService.name);
+
   constructor(
     private readonly blogUserRepository: BlogUserRepository,
 
     @Inject(mongoConfig.KEY)
-    private readonly databaseConfig: ConfigType<typeof mongoConfig>
+    private readonly databaseConfig: ConfigType<typeof mongoConfig>,
+
+    private readonly jwtService: JwtService,
   ) {}
 
   public async register(dto: CreateUserDto): Promise<BlogUserEntity> {
@@ -30,7 +37,8 @@ export class AuthenticationService {
       dateOfBirth: dayjs(dateBirth).toDate(),
       role: UserRole.User,
       avatarImage: '',
-      passwordHash: ''
+      passwordHash: '',
+      registrationDate: dayjs().toDate()
     };
 
     const existUser = await this.blogUserRepository
@@ -71,5 +79,41 @@ export class AuthenticationService {
     }
 
     return user;
+  }
+
+  public async createUserToken(user: User): Promise<Token> {
+    const payload: TokenPayload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      lastName: user.lastName,
+      firstName: user.firstName,
+    };
+
+    try {
+      const accessToken = await this.jwtService.signAsync(payload);
+      return { accessToken };
+    } catch (error) {
+      this.logger.error('[Token generation error]: ' + error.message);
+      throw new HttpException('Token generation error.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  public async changePassword(dto: ChangePasswordDto, currentUserEmail: string): Promise<BlogUserEntity> {
+
+    const existUser = await this.blogUserRepository.findByEmail(currentUserEmail);
+    if (!existUser) {
+      throw new NotFoundException(AuthenticationErrors.UserNotFound);
+    }
+
+    if (!await existUser.comparePassword(dto.password)) {
+      throw new UnauthorizedException(AuthenticationErrors.WrongPassword);
+    }
+
+    const userEntity = await new BlogUserEntity(existUser)
+      .setPassword(dto.newPassword);
+
+    await this.blogUserRepository.update(userEntity);
+    return userEntity;
   }
 }

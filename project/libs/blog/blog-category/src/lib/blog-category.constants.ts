@@ -24,3 +24,7 @@ export enum CategoryPropertiesDescription {
   CategoryId = 'Blog category unique Id',
   Title = 'Blog category unique name'
 }
+
+export enum CategoryPropertiesValidationMessages {
+  TitleIsEmpty = 'The blog category title is empty'
+}

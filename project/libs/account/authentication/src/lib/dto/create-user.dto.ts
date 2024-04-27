@@ -1,5 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { UserPropertiesDescription } from "../rdo/user.constants";
+import { IsEmail, IsISO8601, IsString, MaxLength, MinLength } from 'class-validator';
+
+import { UserPropertiesDescription, UserPropertiesValidationErrors } from "../rdo/user.constants";
 
 export class CreateUserDto {
   @ApiProperty({
@@ -7,6 +9,7 @@ export class CreateUserDto {
     required: true,
     example: 'john.doe@noname.corp'
   })
+  @IsEmail({}, { message: UserPropertiesValidationErrors.EmailNotValid })
   public email: string;
 
   @ApiProperty({
@@ -14,6 +17,7 @@ export class CreateUserDto {
     required: true,
     example: '1981-01-30'
   })
+  @IsISO8601({}, { message: UserPropertiesValidationErrors.DateBirthNotValid })
   public dateBirth: string;
 
   @ApiProperty({
@@ -21,6 +25,9 @@ export class CreateUserDto {
     required: true,
     example: 'John'
   })
+  @IsString()
+  @MinLength(3, { message: UserPropertiesValidationErrors.MinNameLength })
+  @MaxLength(50, { message: UserPropertiesValidationErrors.MaxNameLength })
   public firstName: string;
 
   @ApiProperty({
@@ -28,11 +35,18 @@ export class CreateUserDto {
     required: true,
     example: 'Doe'
   })
+  @IsString()
+  @MinLength(3, { message: UserPropertiesValidationErrors.MinNameLength })
+  @MaxLength(50, { message: UserPropertiesValidationErrors.MaxNameLength })
   public lastName: string;
 
   @ApiProperty({
     description: UserPropertiesDescription.Password,
     required: true,
+    example: 'secret password!'
   })
+  @IsString()
+  @MinLength(6, { message: UserPropertiesValidationErrors.MinPasswordLength })
+  @MaxLength(12, { message: UserPropertiesValidationErrors.MaxPasswordLength })
   public password: string;
 }

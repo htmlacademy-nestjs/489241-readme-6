@@ -1,5 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { UserPropertiesDescription } from "../rdo/user.constants";
+import { IsEmail, IsString } from 'class-validator';
+
+import { UserPropertiesDescription, UserPropertiesValidationErrors } from "../rdo/user.constants";
 
 export class LoginUserDto {
   @ApiProperty({
@@ -7,6 +9,7 @@ export class LoginUserDto {
     required: true,
     example: 'john.doe@noname.corp'
   })
+  @IsEmail({}, { message: UserPropertiesValidationErrors.EmailNotValid })
   public email: string;
 
   @ApiProperty({
@@ -14,5 +17,6 @@ export class LoginUserDto {
     required: true,
     example: 'secret password!'
   })
+  @IsString()
   public password: string;
 }
