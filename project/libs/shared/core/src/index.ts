@@ -18,5 +18,6 @@ export { TokenPayload } from './lib/interfaces/token-payload.interface';
 export { Token } from './lib/interfaces/token.interface';
 export { File } from './lib/interfaces/file.interface';
 export { StoredFile } from './lib/interfaces/stored-file.interface';
+export { Subscriber } from './lib/interfaces/subscriber.interface';
 
 export { Environments } from './lib/environments.enum';

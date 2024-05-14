@@ -3,8 +3,9 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
+import { FileVaultConfigurationRegistrationKey, FileVaultConfigurationPorts } from '@project/file-vault-config'
+
 import { AppModule } from './app/app.module';
-import { FileVaultConfigurationRegistrationKey } from 'libs/file-vault/config/src/lib/file-vault-config.const';
 
 // Constants
 const GLOBAL_PREFIX = 'api';
@@ -25,7 +26,9 @@ async function bootstrap() {
     const configService = app.get(ConfigService);
     const port = configService.get(FileVaultConfigurationRegistrationKey + '.port');
 
-    await app.listen(port || 3000);
+    Logger.verbose("envs", configService["internalConfig"]);
+
+    await app.listen(port || FileVaultConfigurationPorts.DEFAULT_FILE_VAULT_PORT);
     Logger.log(
       `🚀 Application is running on: http://localhost:${port}/${GLOBAL_PREFIX}`
     );
