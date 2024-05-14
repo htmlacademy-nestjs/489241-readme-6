@@ -18,7 +18,7 @@ export class FileUploaderService {
   ) {}
 
   private getUploadDirectoryPath(): string {
-    return this.config.uploadDirectory;
+    return join(__dirname, this.config.uploadDirectory);
   }
 
   private getDestinationFilePath(filename: string): string {
