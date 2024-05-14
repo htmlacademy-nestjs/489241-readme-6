@@ -1,7 +1,7 @@
 import { ConfigType, registerAs } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
 
-import { MongoConfigurationPorts } from './mongo.const';
+import { MongoConfigurationPorts, MongoConfigurationRegistrationKey } from './mongo.const';
 import { MongoEnvironmentConfiguration } from './mongo.env';
 
 export interface MongoConfiguration {
@@ -28,6 +28,6 @@ async function getDbConfig(): Promise<MongoEnvironmentConfiguration> {
   return config;
 }
 
-export default registerAs('mongodb', async (): Promise<ConfigType<typeof getDbConfig>> => {
+export default registerAs(MongoConfigurationRegistrationKey, async (): Promise<ConfigType<typeof getDbConfig>> => {
   return getDbConfig();
 });

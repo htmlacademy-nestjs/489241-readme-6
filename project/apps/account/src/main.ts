@@ -4,6 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
 import { AppModule } from './app/app.module';
+import { AccountConfigurationRegistrationKey } from '@project/account-configuration';
 
 // Constants
 const GLOBAL_PREFIX = 'api';
@@ -25,7 +26,7 @@ async function bootstrap() {
   }));
 
   const configService = app.get(ConfigService);
-  const port = configService.get('account-configuration.port');
+  const port = configService.get(AccountConfigurationRegistrationKey + '.port');
 
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}/${GLOBAL_PREFIX}`);
