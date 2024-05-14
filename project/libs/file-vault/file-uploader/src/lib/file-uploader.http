@@ -10,3 +10,5 @@ Content-Disposition: form-data; name="file"; filename="file-uploader.http"
 --boundary--
 
 ###
+
+GET http://localhost:3000/static/file-uploader.http
