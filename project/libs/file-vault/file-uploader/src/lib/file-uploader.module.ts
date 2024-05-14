@@ -1,11 +1,15 @@
-import { join } from 'node:path';
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+
+import { FileVaultConfigurationRegistrationKey } from '@project/file-vault-config';
 
 import { FileUploaderService } from './file-uploader.service';
 import { FileUploaderController } from './file-uploader.controller';
-import { FileVaultConfigurationRegistrationKey } from '@project/file-vault-config';
+import { UploadedFileModel, FileSchema } from './models/uploaded-file.model';
+import { UploadedFileFactory } from './entities/uploaded-file.factory';
+import { UploadedFileRepository } from './entities/uploaded-file.repository';
 
 const SERVE_ROOT = '/static';
 
@@ -26,9 +30,16 @@ const SERVE_ROOT = '/static';
           }
         }]
       }
-    })
+    }),
+    MongooseModule.forFeature([
+      { name: UploadedFileModel.name, schema: FileSchema }
+    ])
   ],
-  providers: [FileUploaderService],
+  providers: [
+    FileUploaderService,
+    UploadedFileRepository,
+    UploadedFileFactory,
+  ],
   controllers: [FileUploaderController],
 })
 export class FileUploaderModule {}

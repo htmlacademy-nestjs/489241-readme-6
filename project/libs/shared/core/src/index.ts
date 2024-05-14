@@ -16,5 +16,7 @@ export { PaginationResult } from './lib/interfaces/pagination-result.interface';
 export { SortDirection } from './lib/base/sort-direction.enum';
 export { TokenPayload } from './lib/interfaces/token-payload.interface';
 export { Token } from './lib/interfaces/token.interface';
+export { File } from './lib/interfaces/file.interface';
+export { StoredFile } from './lib/interfaces/stored-file.interface';
 
 export { Environments } from './lib/environments.enum';
