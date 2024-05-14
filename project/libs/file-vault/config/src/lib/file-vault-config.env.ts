@@ -12,7 +12,7 @@ export class FileVaultEnvironmentConfiguration {
   @Min(FileVaultConfigurationPorts.MIN_PORT)
   @Max(FileVaultConfigurationPorts.MAX_PORT)
   @IsOptional()
-  public port: number = FileVaultConfigurationPorts.DEFAULT_ACCOUNT_PORT;
+  public port: number = FileVaultConfigurationPorts.DEFAULT_FILE_VAULT_PORT;
 
   @IsString({ message: FileVaultConfigurationErrors.UploadFolderIsRequired })
   public uploadDirectory: string;

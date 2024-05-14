@@ -12,8 +12,8 @@ export interface AccountConfiguration {
 
 async function getAccountConfig(): Promise<FileVaultEnvironmentConfiguration> {
   const config = plainToClass(FileVaultEnvironmentConfiguration, {
-    environment: process.env.ACCOUNT_ENVIRONMENT,
-    port: process.env.ACCOUNT_PORT ? parseInt(process.env.ACCOUNT_PORT, 10) : FileVaultConfigurationPorts.DEFAULT_ACCOUNT_PORT,
+    environment: process.env.FILE_VAULT_ENVIRONMENT,
+    port: process.env.FILE_VAULT_PORT ? parseInt(process.env.FILE_VAULT_PORT, 10) : FileVaultConfigurationPorts.DEFAULT_FILE_VAULT_PORT,
     uploadDirectory: process.env.UPLOAD_DIRECTORY_PATH
   });
 

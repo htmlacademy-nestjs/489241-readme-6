@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
+import { mongoConfig } from '@project/data-access';
+
 import fileVaultConfig from './file-vault-config.conf';
 import { FileVaultConfigurationEnvFilePath } from './file-vault-config.const';
 
@@ -9,7 +11,7 @@ import { FileVaultConfigurationEnvFilePath } from './file-vault-config.const';
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
-      load: [fileVaultConfig],
+      load: [fileVaultConfig, mongoConfig],
       envFilePath: FileVaultConfigurationEnvFilePath
     }),
   ]
