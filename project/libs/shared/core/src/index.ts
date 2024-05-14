@@ -24,3 +24,5 @@ export { Environments } from './lib/environments.enum';
 
 export { getRabbitMQOptions } from './lib/message-queue/get-rabbitmq-options';
 export { RabbitRouting } from './lib/base/rabbit-routing.enum';
+
+export { getMailerAsyncOptions } from './lib/mailer/get-mailer-options';
