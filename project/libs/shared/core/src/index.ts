@@ -21,3 +21,6 @@ export { StoredFile } from './lib/interfaces/stored-file.interface';
 export { Subscriber } from './lib/interfaces/subscriber.interface';
 
 export { Environments } from './lib/environments.enum';
+
+export { getRabbitMQOptions } from './lib/message-queue/get-rabbitmq-options';
+export { RabbitRouting } from './lib/base/rabbit-routing.enum';
