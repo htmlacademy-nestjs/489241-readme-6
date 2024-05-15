@@ -1,7 +1,7 @@
 import { ConfigType, registerAs } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
 
-import { AccountConfigurationPorts } from './account-configuration.const';
+import { AccountConfigurationPorts, AccountConfigurationRegistrationKey } from './account-configuration.const';
 import { AccountEnvironmentConfiguration } from './account-configuration.env';
 
 export interface AccountConfiguration {
@@ -20,6 +20,6 @@ async function getAccountConfig(): Promise<AccountEnvironmentConfiguration> {
   return config;
 }
 
-export default registerAs('account-configuration', async (): Promise<ConfigType<typeof getAccountConfig>> => {
+export default registerAs(AccountConfigurationRegistrationKey, async (): Promise<ConfigType<typeof getAccountConfig>> => {
   return getAccountConfig();
 });

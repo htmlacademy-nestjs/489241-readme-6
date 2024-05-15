@@ -3,6 +3,7 @@ import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags }
 
 import { fillDto } from '@project/shared-helpers';
 import { MongoIdValidationPipe } from '@project/pipes';
+import { NotifyService } from "@project/account-notify";
 
 import { AuthenticationService } from "./authentication.service";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -17,7 +18,8 @@ import { ChangePasswordDto } from "./dto/change-password.dto";
 @Controller('auth')
 export class AuthenticationController {
   constructor (
-    private readonly authenticationService: AuthenticationService
+    private readonly authenticationService: AuthenticationService,
+    private readonly notifyService: NotifyService,
   ) {}
 
   @Post('register')
@@ -29,6 +31,10 @@ export class AuthenticationController {
   @ApiResponse({ status: HttpStatus.CONFLICT, description: AuthenticationErrors.AuthUserExists })
   public async register(@Body() dto: CreateUserDto) {
     const newUser = await this.authenticationService.register(dto);
+
+    const { email, firstName, lastName } = newUser;
+    await this.notifyService.registerSubscriber({ email, firstName, lastName });
+
     return fillDto(UserRdo, newUser.toPOJO());
   }
 

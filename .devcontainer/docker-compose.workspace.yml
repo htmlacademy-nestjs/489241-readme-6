@@ -35,8 +35,11 @@ services:
 
   rabbitmq:
     restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
 
-  mailcatcher:
+  fakesmtp:
     restart: unless-stopped
 
   mongo-express:

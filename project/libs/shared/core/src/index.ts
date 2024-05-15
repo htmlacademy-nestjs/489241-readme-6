@@ -16,5 +16,13 @@ export { PaginationResult } from './lib/interfaces/pagination-result.interface';
 export { SortDirection } from './lib/base/sort-direction.enum';
 export { TokenPayload } from './lib/interfaces/token-payload.interface';
 export { Token } from './lib/interfaces/token.interface';
+export { File } from './lib/interfaces/file.interface';
+export { StoredFile } from './lib/interfaces/stored-file.interface';
+export { Subscriber } from './lib/interfaces/subscriber.interface';
 
 export { Environments } from './lib/environments.enum';
+
+export { getRabbitMQOptions } from './lib/message-queue/get-rabbitmq-options';
+export { RabbitRouting } from './lib/base/rabbit-routing.enum';
+
+export { getMailerAsyncOptions } from './lib/mailer/get-mailer-options';

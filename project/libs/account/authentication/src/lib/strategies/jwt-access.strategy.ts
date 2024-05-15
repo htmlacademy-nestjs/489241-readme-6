@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { TokenPayload } from '@project/shared-core';
+import { JwtConfigurationRegistrationKey } from '@project/account-configuration';
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(Strategy) {
@@ -13,7 +14,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('jwt-configuration.accessTokenSecret')
+      secretOrKey: configService.get<string>(JwtConfigurationRegistrationKey + '.accessTokenSecret')
     });
   }
 

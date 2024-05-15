@@ -1,3 +1,6 @@
+export const AccountConfigurationRegistrationKey = 'account-configuration';
+export const JwtConfigurationRegistrationKey = 'jwt-configuration';
+
 export enum AccountConfigurationPorts {
   MIN_PORT = 0,
   MAX_PORT = 65535,

@@ -1,6 +1,7 @@
 import { ConfigType, registerAs } from '@nestjs/config';
 import { JwtEnvironmentConfiguration } from './jwt.env';
 import { plainToClass } from 'class-transformer';
+import { JwtConfigurationRegistrationKey } from './account-configuration.const';
 
 export interface JwtConfig {
   accessTokenSecret: string;
@@ -18,6 +19,6 @@ async function getJwtConfig(): Promise<JwtEnvironmentConfiguration> {
   return config;
 }
 
-export default registerAs('jwt-configuration', async (): Promise<ConfigType<typeof getJwtConfig>> => {
+export default registerAs(JwtConfigurationRegistrationKey, async (): Promise<ConfigType<typeof getJwtConfig>> => {
   return getJwtConfig();
 });

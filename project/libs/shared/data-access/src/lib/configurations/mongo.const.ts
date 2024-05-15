@@ -1,3 +1,5 @@
+export const MongoConfigurationRegistrationKey = 'mongodb';
+
 export enum MongoConfigurationPorts {
   MIN_PORT = 0,
   MAX_PORT = 65535,
