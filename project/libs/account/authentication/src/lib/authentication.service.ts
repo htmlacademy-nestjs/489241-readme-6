@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 import { ConfigType } from '@nestjs/config';
-import { mongoConfig } from '@project/data-access';
 import { JwtService } from '@nestjs/jwt';
 import { ConflictException, HttpException, HttpStatus, Inject, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { BlogUserRepository, BlogUserEntity } from '@project/blog-user';
 import { Token, TokenPayload, User, UserRole } from '@project/shared-core';
+import { jwtConfig } from '@project/account-configuration';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthenticationErrors } from './authentication.constants';
@@ -18,11 +18,9 @@ export class AuthenticationService {
   private readonly logger = new Logger(AuthenticationService.name);
 
   constructor(
+    @Inject(jwtConfig.KEY)
+    private readonly jwtOptions: ConfigType<typeof jwtConfig>,
     private readonly blogUserRepository: BlogUserRepository,
-
-    @Inject(mongoConfig.KEY)
-    private readonly databaseConfig: ConfigType<typeof mongoConfig>,
-
     private readonly jwtService: JwtService,
   ) {}
 
@@ -92,7 +90,12 @@ export class AuthenticationService {
 
     try {
       const accessToken = await this.jwtService.signAsync(payload);
-      return { accessToken };
+      const refreshToken = await this.jwtService.signAsync(payload, {
+        secret: this.jwtOptions.refreshTokenSecret,
+        expiresIn: this.jwtOptions.refreshTokenExpiresIn
+      });
+
+      return { accessToken, refreshToken };
     } catch (error) {
       this.logger.error('[Token generation error]: ' + error.message);
       throw new HttpException('Token generation error.', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -115,5 +118,15 @@ export class AuthenticationService {
 
     await this.blogUserRepository.update(userEntity);
     return userEntity;
+  }
+
+  public async getUserByEmail(email: string) {
+    const existUser = await this.blogUserRepository.findByEmail(email);
+
+    if (! existUser) {
+      throw new NotFoundException(AuthenticationErrors.UserNotFound);
+    }
+
+    return existUser;
   }
 }

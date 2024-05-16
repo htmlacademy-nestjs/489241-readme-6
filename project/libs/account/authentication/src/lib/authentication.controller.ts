@@ -14,6 +14,7 @@ import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 import { ChangePasswordDto } from "./dto/change-password.dto";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { RequestWithUser } from "./interfaces/request-with-user.interface";
+import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -60,12 +61,12 @@ export class AuthenticationController {
     type: UserRdo
   })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
+  @UseGuards(JwtAuthGuard)
   public async get(@Param('id', MongoIdValidationPipe) id: string) {
     const existUser = await this.authenticationService.getUser(id);
     return fillDto(UserRdo, existUser.toPOJO());
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('change-password')
   @ApiOperation({ summary: AuthenticationOperationDescription.ChangeUserPassword })
   @ApiOkResponse({
@@ -73,9 +74,22 @@ export class AuthenticationController {
     type: LoggedUserRdo
   })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
+  @UseGuards(JwtAuthGuard)
   public async changePassword(@Body() dto: ChangePasswordDto, @Request() req) {
     const changedUser = await this.authenticationService.changePassword(dto, req.user.email);
     const userToken = await this.authenticationService.createUserToken(changedUser);
     return fillDto(LoggedUserRdo, { ...changedUser.toPOJO(), ...userToken });
+  }
+
+
+  @Post('refresh')
+  @ApiOperation({ summary: AuthenticationOperationDescription.RefreshTokens })
+  @ApiOkResponse({
+    description: AuthenticationResponseMessage.RefreshTokens,
+   })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
+  @UseGuards(JwtRefreshGuard)
+  public async refreshToken(@Req() { user }: RequestWithUser) {
+    return this.authenticationService.createUserToken(user);
   }
 }
