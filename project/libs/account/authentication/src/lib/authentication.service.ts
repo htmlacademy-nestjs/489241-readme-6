@@ -4,13 +4,14 @@ import { JwtService } from '@nestjs/jwt';
 import { ConflictException, HttpException, HttpStatus, Inject, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { BlogUserRepository, BlogUserEntity } from '@project/blog-user';
-import { Token, TokenPayload, User, UserRole } from '@project/shared-core';
+import { Token, User, UserRole, createJWTPayload } from '@project/shared-core';
 import { jwtConfig } from '@project/account-configuration';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthenticationErrors } from './authentication.constants';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { RefreshTokenService } from './refresh-token-module/refresh-token.service';
 
 
 @Injectable()
@@ -22,6 +23,7 @@ export class AuthenticationService {
     private readonly jwtOptions: ConfigType<typeof jwtConfig>,
     private readonly blogUserRepository: BlogUserRepository,
     private readonly jwtService: JwtService,
+    private readonly refreshTokenService: RefreshTokenService,
   ) {}
 
   public async register(dto: CreateUserDto): Promise<BlogUserEntity> {
@@ -80,17 +82,13 @@ export class AuthenticationService {
   }
 
   public async createUserToken(user: User): Promise<Token> {
-    const payload: TokenPayload = {
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-      lastName: user.lastName,
-      firstName: user.firstName,
-    };
+    const accessTokenPayload = createJWTPayload(user);
+    const refreshTokenPayload = { ...accessTokenPayload, tokenId: crypto.randomUUID() };
+    await this.refreshTokenService.createRefreshSession(refreshTokenPayload);
 
     try {
-      const accessToken = await this.jwtService.signAsync(payload);
-      const refreshToken = await this.jwtService.signAsync(payload, {
+      const accessToken = await this.jwtService.signAsync(accessTokenPayload);
+      const refreshToken = await this.jwtService.signAsync(refreshTokenPayload, {
         secret: this.jwtOptions.refreshTokenSecret,
         expiresIn: this.jwtOptions.refreshTokenExpiresIn
       });
