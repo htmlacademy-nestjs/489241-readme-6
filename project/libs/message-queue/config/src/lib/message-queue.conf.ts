@@ -4,15 +4,6 @@ import { plainToClass } from 'class-transformer';
 import { MessageQueueConfigurationPorts, MessageQueueConfigurationRegistrationKey } from './message-queue.const';
 import { MessageQueueEnvironmentConfiguration } from './message-queue.env'
 
-export interface MessageQueueConfiguration {
-  host: string;
-  port: number;
-  user: string;
-  password: string;
-  queue: string;
-  exchange: string;
-}
-
 async function getMessageQueueConfig(): Promise<MessageQueueEnvironmentConfiguration> {
   const config = plainToClass(MessageQueueEnvironmentConfiguration, {
     host: process.env.RABBIT_HOST,
