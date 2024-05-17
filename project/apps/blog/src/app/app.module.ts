@@ -4,7 +4,11 @@ import { BlogCommentModule } from '@project/blog-comment';
 import { BlogPostModule } from '@project/blog-post';
 
 @Module({
-  imports: [BlogCategoryModule, BlogCommentModule, BlogPostModule],
+  imports: [
+    BlogCategoryModule,
+    BlogCommentModule,
+    BlogPostModule
+  ],
   controllers: [],
   providers: [],
 })
