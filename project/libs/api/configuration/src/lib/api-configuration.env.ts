@@ -1,7 +1,7 @@
 import { IsEnum, IsNumber, IsOptional, IsString, Max, Min, validateOrReject } from 'class-validator';
 
 import { Environments } from '@project/shared-core';
-import { ApiConfigurationPorts, ApiConfigurationErrors } from './api-configuration.const';
+import { ApiConfigurationPorts, ApiConfigurationErrors, BlogEndpoints, AccountEndpoints } from './api-configuration.const';
 
 export class ApiEnvironmentConfiguration {
   @IsString({ message: ApiConfigurationErrors.EnvironmentRequired })
@@ -28,5 +28,13 @@ export class ApiEnvironmentConfiguration {
 
   public async validate(): Promise<void> {
     await validateOrReject(this);
+  }
+
+  public getBlogUrl(blogEndpoint: BlogEndpoints): string {
+    return `${this.baseBlogUrl}/${blogEndpoint}`
+  }
+
+  public getAccountUrl(accountEndpoint: AccountEndpoints): string {
+    return `${this.baseAccountUrl}/${accountEndpoint}`
   }
 }

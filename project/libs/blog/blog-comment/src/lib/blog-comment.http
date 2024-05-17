@@ -1,9 +1,13 @@
+@hostname = localhost
+@port = 3002
+@host = {{hostname}}:{{port}}
+
 # Get all comments for post
-GET http://localhost:3000/api/posts/79cc980c-3e48-4598-8607-0a29f0a837cf/comments HTTP/1.1
+GET http://{{host}}/api/posts/79cc980c-3e48-4598-8607-0a29f0a837cf/comments HTTP/1.1
 
 
 # Create a new comment for post
-POST http://localhost:3000/api/posts/79cc980c-3e48-4598-8607-0a29f0a837cf/comments HTTP/1.1
+POST http://{{host}}/api/posts/79cc980c-3e48-4598-8607-0a29f0a837cf/comments HTTP/1.1
 Content-Type: application/json
 
 {

@@ -27,5 +27,6 @@ export enum BlogEndpoints {
 }
 
 export enum AccountEndpoints {
-  AuthenticateUser = 'auth',
+  LoginUser = 'auth/login',
+  RefreshTokens = 'auth/refresh',
 }

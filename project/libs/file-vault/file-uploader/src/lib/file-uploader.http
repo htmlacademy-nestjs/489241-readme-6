@@ -1,5 +1,9 @@
+@hostname = localhost
+@port = 3003
+@host = {{hostname}}:{{port}}
+
 # Upload some file
-POST http://localhost:3000/api/files/upload HTTP/1.1
+POST http://{{host}}/api/files/upload HTTP/1.1
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
@@ -11,4 +15,4 @@ Content-Disposition: form-data; name="file"; filename="file-uploader.http"
 
 ###
 
-GET http://localhost:3000/static/file-uploader.http
+GET http://{{host}}/static/file-uploader.http
