@@ -26,12 +26,13 @@ async function bootstrap() {
   }));
 
   const configService = app.get(ConfigService);
-  const port = configService.get(AccountConfigurationRegistrationKey + '.port');
+  const port = configService.get(AccountConfigurationRegistrationKey + '.port')
+    || AccountConfigurationPorts.DEFAULT_ACCOUNT_PORT;
 
   Logger.verbose("envs", configService["internalConfig"]);
 
-  await app.listen(port || AccountConfigurationPorts.DEFAULT_ACCOUNT_PORT);
-  Logger.log(`🚀 Application is running on: http://localhost:${port}/${GLOBAL_PREFIX}`);
+  await app.listen(port );
+  Logger.log(`🚀 Account is running on: http://localhost:${port}/${GLOBAL_PREFIX}`);
 }
 
 bootstrap();

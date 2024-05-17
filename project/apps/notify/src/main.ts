@@ -24,14 +24,13 @@ async function bootstrap() {
   SwaggerModule.setup(GLOBAL_PREFIX + '/swagger', app, document);
 
   const configService = app.get(ConfigService);
-  const port = configService.get(NotifyConfigurationRegistrationKey + '.port');
+  const port = configService.get(NotifyConfigurationRegistrationKey + '.port')
+    || NotifyConfigurationPorts.DEFAULT_NOTIFY_PORT;
 
   Logger.verbose("envs", configService["internalConfig"]);
 
-  await app.listen(port || NotifyConfigurationPorts.DEFAULT_NOTIFY_PORT);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${GLOBAL_PREFIX}`
-  );
+  await app.listen(port);
+  Logger.log(`🚀 Notify is running on: http://localhost:${port}/${GLOBAL_PREFIX}`);
 }
 
 bootstrap();

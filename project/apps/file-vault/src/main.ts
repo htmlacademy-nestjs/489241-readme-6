@@ -24,14 +24,13 @@ async function bootstrap() {
     SwaggerModule.setup(GLOBAL_PREFIX + '/swagger', app, document);
 
     const configService = app.get(ConfigService);
-    const port = configService.get(FileVaultConfigurationRegistrationKey + '.port');
+    const port = configService.get(FileVaultConfigurationRegistrationKey + '.port')
+      || FileVaultConfigurationPorts.DEFAULT_FILE_VAULT_PORT;
 
     Logger.verbose("envs", configService["internalConfig"]);
 
-    await app.listen(port || FileVaultConfigurationPorts.DEFAULT_FILE_VAULT_PORT);
-    Logger.log(
-      `🚀 Application is running on: http://localhost:${port}/${GLOBAL_PREFIX}`
-    );
+    await app.listen(port );
+    Logger.log(`🚀 File Vault is running on: http://localhost:${port}/${GLOBAL_PREFIX}`);
 }
 
 bootstrap();

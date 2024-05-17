@@ -24,14 +24,13 @@ async function bootstrap() {
   SwaggerModule.setup(GLOBAL_PREFIX + '/swagger', app, document);
 
   const configService = app.get(ConfigService);
-  const port = configService.get(ApiConfigurationRegistrationKey + '.port') || ApiConfigurationPorts.DEFAULT_API_PORT;
+  const port = configService.get(ApiConfigurationRegistrationKey + '.port')
+    || ApiConfigurationPorts.DEFAULT_API_PORT;
 
   Logger.verbose("envs", configService["internalConfig"]);
 
   await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${GLOBAL_PREFIX}`
-  );
+  Logger.log(`🚀 API Gateway is running on: http://localhost:${port}/${GLOBAL_PREFIX}`);
 }
 
 bootstrap();

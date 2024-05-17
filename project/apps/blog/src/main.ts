@@ -1,11 +1,13 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
+
+import { BlogConfigurationRegistrationKey, BlogConfigurationPorts } from '@project/blog-configuration'
 
 import { AppModule } from './app/app.module';
 
 // Constants
-const PORT = 3000;
 const GLOBAL_PREFIX = 'api';
 
 async function bootstrap() {
@@ -22,11 +24,14 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-  const port = process.env.PORT || 3000;
+  const configService = app.get(ConfigService);
+  const port = configService.get(BlogConfigurationRegistrationKey + '.port')
+    || BlogConfigurationPorts.DEFAULT_BLOG_PORT;
+
+  Logger.verbose("envs", configService["internalConfig"]);
+
   await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${PORT}/${GLOBAL_PREFIX}`
-  );
+  Logger.log(`🚀 Blog is running on: http://localhost:${port}/${GLOBAL_PREFIX}`);
 }
 
 bootstrap();
