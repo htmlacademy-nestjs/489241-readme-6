@@ -26,9 +26,7 @@ export class UsersController {
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: UsersResponseMessage.LoggedError })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: UsersErrors.UserNotFound })
   public async login(@Body() loginUserDto: LoginUserDto) {
-    console.log(this.config);
     const loginUrl = this.config.getAccountUrl(AccountEndpoints.LoginUser);
-    console.log(loginUrl);
     const { data } = await this.httpService.axiosRef.post(loginUrl, loginUserDto);
     return data;
   }
