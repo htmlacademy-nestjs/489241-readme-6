@@ -15,6 +15,7 @@ import { ChangePasswordDto } from "./dto/change-password.dto";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { RequestWithUser } from "./interfaces/request-with-user.interface";
 import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
+import { RequestWithTokenPayload } from "./interfaces/request-with-token-payload.interface";
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -81,15 +82,24 @@ export class AuthenticationController {
     return fillDto(LoggedUserRdo, { ...changedUser.toPOJO(), ...userToken });
   }
 
-
   @Post('refresh')
   @ApiOperation({ summary: AuthenticationOperationDescription.RefreshTokens })
   @ApiOkResponse({
     description: AuthenticationResponseMessage.RefreshTokens,
-   })
+  })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
   @UseGuards(JwtRefreshGuard)
   public async refreshToken(@Req() { user }: RequestWithUser) {
     return this.authenticationService.createUserToken(user);
+  }
+
+  @Post('check')
+  @ApiOperation({ summary: AuthenticationOperationDescription.CheckToken })
+  @ApiOkResponse({
+    description: AuthenticationResponseMessage.CheckToken,
+  })
+  @UseGuards(JwtAuthGuard)
+  public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
+    return payload;
   }
 }

@@ -10,7 +10,8 @@ export enum AuthenticationResponseMessage {
   UserFound = 'User found and user details returned in body',
   UserCreated = 'The new user has been successfully created',
   PasswordUpdated = 'User password was updated',
-  RefreshTokens = 'Returns new pair of access and refresh tokens'
+  RefreshTokens = 'Returns new pair of access and refresh tokens',
+  CheckToken = 'Returns verified user details',
 }
 
 export enum AuthenticationOperationDescription {
@@ -18,5 +19,6 @@ export enum AuthenticationOperationDescription {
   GetById = 'Gets user details by id',
   Register = 'Registers user',
   ChangeUserPassword = 'Changes user password',
-  RefreshTokens = 'Generates a new pair of access and refresh tokens'
+  RefreshTokens = 'Generates a new pair of access and refresh tokens',
+  CheckToken = 'Verify user toke (for internal user only by API Gateway)',
 }

@@ -1,7 +1,11 @@
+export enum CommonErrors {
+  InternalServerError = 'Internal server error',
+}
+
 export enum UsersErrors {
   AuthUserExists = 'User with the email already exists',
   UserNotFound = 'User not found',
-  WrongPassword = 'User password is wrong'
+  WrongPassword = 'User password is wrong',
 }
 
 export enum UsersResponseMessage {

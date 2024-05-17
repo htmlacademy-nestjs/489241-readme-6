@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Inject, Body, Controller, Post, Req, HttpStatus } from '@nestjs/common';
+import { Inject, Body, Controller, Post, Req, HttpStatus, UseFilters } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
@@ -7,9 +7,11 @@ import { LoggedUserRdo, LoginUserDto } from '@project/authentication';
 import { apiConfig, AccountEndpoints } from '@project/api-configuration';
 
 import { UsersErrors, UsersOperationDescription, UsersResponseMessage } from './users.constants';
+import { AxiosExceptionFilter } from './filters/axios-exception.filter';
 
 @ApiTags('users')
 @Controller('users')
+@UseFilters(AxiosExceptionFilter)
 export class UsersController {
   constructor(
     @Inject(apiConfig.KEY)
