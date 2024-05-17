@@ -20,6 +20,12 @@ export class ApiEnvironmentConfiguration {
   @IsString({ message: ApiConfigurationErrors.AccountBaseUrlRequired })
   public baseAccountUrl: string;
 
+  @IsNumber({}, { message: ApiConfigurationErrors.HttpClientTimeoutIsRequired })
+  public httpClientTimeout: number;
+
+  @IsNumber({}, { message: ApiConfigurationErrors.HttpClientMaxRedirectsIsRequired })
+  public httpClientMaxRedirects: number;
+
   public async validate(): Promise<void> {
     await validateOrReject(this);
   }

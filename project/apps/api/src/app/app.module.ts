@@ -1,10 +1,17 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 
-import { ApiConfigurationModule } from '@project/api-configuration';
+import { ApiConfigurationModule, getHttpClientOptions } from '@project/api-configuration';
 
 @Module({
   imports: [
-    ApiConfigurationModule
+    ApiConfigurationModule,
+    HttpModule.registerAsync({
+      imports: [ApiConfigurationModule],
+      useFactory: getHttpClientOptions,
+      inject: [ConfigService],
+    })
   ],
   controllers: [],
   providers: [],

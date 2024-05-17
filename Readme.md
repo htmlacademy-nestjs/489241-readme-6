@@ -18,7 +18,12 @@ _`.editorconfig`, `.gitattributes`, `.gitignore`._
 
 ![Run in Dev Container](./images/01-run-in-dev-container.png)
 
-Более детально про другие варианты запуска приложений тут [How to Run Applications](./how-to/1-How-to-Run-Applications.md)
+Более детально про другие варианты запуска приложений тут [How to Run Applications](./how-to/1-How-to-Run-Applications.md). Там описано
+* Переменные окружения
+* Как запускать `docker compose` файл
+* Как запускать приложения
+
+Тут [How to Connect to Database](./how-to/2-How-to-Connect-to-Databases) можно узнать как соедениться с БДых после запуска приложений.
 
 ## Памятка
 
