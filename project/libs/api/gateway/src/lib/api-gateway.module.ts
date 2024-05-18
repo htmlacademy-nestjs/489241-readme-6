@@ -5,6 +5,8 @@ import { HttpModule } from '@nestjs/axios';
 import { ApiConfigurationModule, getHttpClientOptions } from '@project/api-configuration';
 
 import { UsersController } from './users.controller';
+import { CheckAuthGuard } from './guards/check-auth.guard';
+import { BlogController } from './blog.controller';
 
 @Module({
   imports: [
@@ -17,7 +19,10 @@ import { UsersController } from './users.controller';
   ],
   controllers: [
     UsersController,
+    BlogController,
   ],
-  providers: [],
+  providers: [
+    CheckAuthGuard,
+  ],
 })
 export class ApiGatewayModule {}

@@ -17,7 +17,8 @@ function getBlogUsers() {
       dateOfBirth: dayjs().toDate(),
       role: UserRole.User,
       avatarImage: '',
-      passwordHash: ''
+      passwordHash: '',
+      registrationDate: dayjs().toDate(),
     },
     {
       id: '',
@@ -27,7 +28,8 @@ function getBlogUsers() {
       dateOfBirth: dayjs().toDate(),
       role: UserRole.User,
       avatarImage: '',
-      passwordHash: ''
+      passwordHash: '',
+      registrationDate: dayjs().toDate(),
     },
   ];
 }

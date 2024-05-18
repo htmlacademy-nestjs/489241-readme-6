@@ -1,3 +1,8 @@
+# How to use
+# 0. Make sure you seed Account with default users or perform first create user request
+# 1. Run login request before any request that requires either Access Token or Refresh Token
+#    as login request will set 'access_token' and 'refresh_token' variables
+
 @hostname = localhost
 @port = 3001
 @host = {{hostname}}:{{port}}
@@ -29,8 +34,8 @@ POST http://{{host}}/api/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "john-third.doe@noname.corp",
-  "password": "password!123"
+  "email": "alice.doe@noname.com",
+  "password": "qwaszx@12345"
 }
 
 ### Get access token from request above (if was executed)
