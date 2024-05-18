@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, UseGuards, Request } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post, UseGuards, Request, Req } from "@nestjs/common";
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { fillDto } from '@project/shared-helpers';
@@ -7,12 +7,15 @@ import { NotifyService } from "@project/account-notify";
 
 import { AuthenticationService } from "./authentication.service";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { LoginUserDto } from "./dto/login-user.dto";
 import { AuthenticationErrors, AuthenticationOperationDescription, AuthenticationResponseMessage } from "./authentication.constants";
 import { UserRdo } from "./rdo/user.rdo";
 import { LoggedUserRdo } from "./rdo/logged-user.rdo";
 import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 import { ChangePasswordDto } from "./dto/change-password.dto";
+import { LocalAuthGuard } from "./guards/local-auth.guard";
+import { RequestWithUser } from "./interfaces/request-with-user.interface";
+import { JwtRefreshGuard } from "./guards/jwt-refresh.guard";
+import { RequestWithTokenPayload } from "./interfaces/request-with-token-payload.interface";
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -46,10 +49,10 @@ export class AuthenticationController {
   })
   @ApiResponse({ status: HttpStatus.FORBIDDEN, description: AuthenticationResponseMessage.LoggedError })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
-  public async login(@Body() dto: LoginUserDto) {
-    const verifiedUser = await this.authenticationService.verifyUser(dto);
-    const userToken = await this.authenticationService.createUserToken(verifiedUser);
-    return fillDto(LoggedUserRdo, { ...verifiedUser.toPOJO(), ...userToken });
+  @UseGuards(LocalAuthGuard)
+  public async login(@Req() { user }: RequestWithUser) {
+    const userToken = await this.authenticationService.createUserToken(user);
+    return fillDto(LoggedUserRdo, { ...user.toPOJO(), ...userToken });
   }
 
   @Get(':id')
@@ -59,12 +62,12 @@ export class AuthenticationController {
     type: UserRdo
   })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
+  @UseGuards(JwtAuthGuard)
   public async get(@Param('id', MongoIdValidationPipe) id: string) {
     const existUser = await this.authenticationService.getUser(id);
     return fillDto(UserRdo, existUser.toPOJO());
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('change-password')
   @ApiOperation({ summary: AuthenticationOperationDescription.ChangeUserPassword })
   @ApiOkResponse({
@@ -72,9 +75,31 @@ export class AuthenticationController {
     type: LoggedUserRdo
   })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
+  @UseGuards(JwtAuthGuard)
   public async changePassword(@Body() dto: ChangePasswordDto, @Request() req) {
     const changedUser = await this.authenticationService.changePassword(dto, req.user.email);
     const userToken = await this.authenticationService.createUserToken(changedUser);
     return fillDto(LoggedUserRdo, { ...changedUser.toPOJO(), ...userToken });
+  }
+
+  @Post('refresh')
+  @ApiOperation({ summary: AuthenticationOperationDescription.RefreshTokens })
+  @ApiOkResponse({
+    description: AuthenticationResponseMessage.RefreshTokens,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: AuthenticationErrors.UserNotFound })
+  @UseGuards(JwtRefreshGuard)
+  public async refreshToken(@Req() { user }: RequestWithUser) {
+    return this.authenticationService.createUserToken(user);
+  }
+
+  @Post('check')
+  @ApiOperation({ summary: AuthenticationOperationDescription.CheckToken })
+  @ApiOkResponse({
+    description: AuthenticationResponseMessage.CheckToken,
+  })
+  @UseGuards(JwtAuthGuard)
+  public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
+    return payload;
   }
 }

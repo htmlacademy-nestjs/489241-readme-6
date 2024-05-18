@@ -4,14 +4,6 @@ import { plainToClass } from 'class-transformer';
 import { EmailConfigurationPorts, EmailConfigurationRegistrationKey } from './email.const';
 import { EmailEnvironmentConfiguration } from './email.env'
 
-export interface EmailConfiguration {
-  host: string;
-  port: number;
-  user: string;
-  password: string;
-  from: string;
-}
-
 async function getEmailConfig(): Promise<EmailEnvironmentConfiguration> {
   const config = plainToClass(EmailEnvironmentConfiguration, {
     host: process.env.MAIL_SMTP_HOST,

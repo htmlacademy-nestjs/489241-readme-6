@@ -6,3 +6,6 @@ stop-env:
 
 remove-env:
 	sudo docker rm -f $(sudo docker ps -a -q) && sudo docker volume rm $(sudo docker volume ls -q)
+
+run-apps:
+	nx run-many --parallel=5 --target=serve --projects=account,api,blog,file-vault,notify

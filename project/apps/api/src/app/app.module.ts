@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
 
+import { ApiGatewayModule } from '@project/api-gateway';
+
 @Module({
-  imports: [],
+  imports: [
+    ApiGatewayModule,
+  ],
   controllers: [],
   providers: [],
 })

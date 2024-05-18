@@ -4,11 +4,6 @@ import { plainToClass } from 'class-transformer';
 import { AccountConfigurationPorts, AccountConfigurationRegistrationKey } from './account-configuration.const';
 import { AccountEnvironmentConfiguration } from './account-configuration.env';
 
-export interface AccountConfiguration {
-  environment: string;
-  port: number;
-}
-
 async function getAccountConfig(): Promise<AccountEnvironmentConfiguration> {
   const config = plainToClass(AccountEnvironmentConfiguration, {
     environment: process.env.ACCOUNT_ENVIRONMENT,

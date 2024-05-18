@@ -4,11 +4,6 @@ import { plainToClass } from 'class-transformer';
 import { NotifyConfigurationPorts, NotifyConfigurationRegistrationKey } from './notify.const';
 import { NotifyEnvironmentConfiguration } from './notify.env'
 
-export interface NotifyConfiguration {
-  environment: string;
-  port: number;
-}
-
 async function getNotifyConfig(): Promise<NotifyEnvironmentConfiguration> {
   console.log("2 - get Notify conf - BEGIN");
   const config = plainToClass(NotifyEnvironmentConfiguration, {

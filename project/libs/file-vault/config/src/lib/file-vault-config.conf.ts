@@ -4,12 +4,6 @@ import { plainToClass } from 'class-transformer';
 import { FileVaultConfigurationPorts, FileVaultConfigurationRegistrationKey } from './file-vault-config.const';
 import { FileVaultEnvironmentConfiguration } from './file-vault-config.env'
 
-export interface FileVaultConfiguration {
-  environment: string;
-  port: number;
-  uploadDirectory: string;
-}
-
 async function getFileVaultConfig(): Promise<FileVaultEnvironmentConfiguration> {
   const config = plainToClass(FileVaultEnvironmentConfiguration, {
     environment: process.env.FILE_VAULT_ENVIRONMENT,

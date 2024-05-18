@@ -12,5 +12,7 @@ export enum AccountConfigurationErrors {
   EnvironmentIsIncorrect = 'Account environment is not correct',
   PortRequired = 'Account port is required',
   AccessTokenSecretRequired = 'Access Token Secret is required',
-  AccessTokenExpiresInIsRequired = 'Access Token expiration is required'
+  AccessTokenExpiresInIsRequired = 'Access Token expiration is required',
+  RefreshTokenSecretRequired = 'Refresh Token Secret is required',
+  RefreshTokenExpiresInIsRequired = 'Refresh Token expiration is required',
 }
