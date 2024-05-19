@@ -14,7 +14,8 @@ export enum BlogPostPropertiesDescription {
   QuerySortProperty = 'Sort property',
   QueryPageNumber = "Page number",
   QueryPostType = 'Blog post type',
-  QueryPostAuthor = 'Blog post Author Id'
+  QueryPostAuthor = 'Blog post Author Id',
+  QueryPostState = 'Blog post state',
 }
 
 export enum BlogPostsWithPagingPropertiesDescription {
@@ -35,14 +36,15 @@ export enum BlogPostValidationMessages {
 }
 
 export enum BlogPostQueryDefaults {
-  DefaultCountLimit = 10,
+  DefaultCountLimit = 25,
   DefaultPageCount = 1,
 }
 
 export enum BlogPostOperationDescription {
   ShowBlogPostById = 'Gets blog post details by id',
   CreateBlogPost = 'Creates blog post',
-  SearchBlogPosts = 'Searches blog posts based on search criteria',
+  ListBlogPosts = 'Lists blog posts based on search criteria',
+  ListBlogPostsByUser = 'Lists user blog posts based on search criteria',
   DeleteBlogPostById = 'Deletes blog post by specified id',
   UpdateBlogPostById = 'Updates blog post by specified id',
   CreateCommentForBlogId = 'Creates blog post comment for specified blog post id',
@@ -54,7 +56,7 @@ export enum BlogPostOperationDescription {
 export enum BlogPostResponseMessage {
   ShowBlogPostById = 'Returned blog post details in response body',
   CreatedBlogPost = 'Returns created blog post details in response body',
-  SearchBlogPosts = 'Returns search results in response body',
+  ListsBlogPosts = 'Returns blog posts list in response body',
   CreateCommentForBlogId = 'Blog comment was created and details returned in response body',
   RePostedBlogPost = 'Blog post was re-posted',
 }

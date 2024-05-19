@@ -10,8 +10,6 @@ import {
   Patch,
   Post,
   Query,
-  Req,
-  UseGuards
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
@@ -25,7 +23,6 @@ import { BlogPostWithPaginationRdo } from './rdo/blog-post-with-pagination.rdo';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { BlogPostOperationDescription, BlogPostPropertiesDescription, BlogPostResponseError, BlogPostResponseMessage } from './blog-post.constants';
-import { JwtAuthGuard, RequestWithUser } from '@project/authentication';
 import { MongoIdValidationPipe } from '@project/pipes';
 
 @ApiTags('blog')
@@ -48,9 +45,9 @@ export class BlogPostController {
   }
 
   @Get('/')
-  @ApiOperation({ summary: BlogPostOperationDescription.SearchBlogPosts })
+  @ApiOperation({ summary: BlogPostOperationDescription.ListBlogPosts })
   @ApiOkResponse({
-    description: BlogPostResponseMessage.SearchBlogPosts,
+    description: BlogPostResponseMessage.ListsBlogPosts,
     type: BlogPostWithPaginationRdo,
   })
   public async index(@Query() query: BlogPostQuery) {

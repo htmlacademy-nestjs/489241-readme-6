@@ -18,14 +18,15 @@ export enum BlogPostValidationMessages {
 export enum BlogPostOperationDescription {
   CreateBlogPost = 'Creates blog post',
   AddLikeToBlogPost = 'Adds like to specified blog post',
-  SearchBlogPosts = 'Searches blog posts based on search criteria',
+  ListBlogPosts = 'Lists blog posts based on search criteria',
+  ListBlogPostsByUser = 'Lists blog posts for user based on search criteria',
   PublishBlogPost = 'Publish blog post',
   RePostBlogPost = 'Re-post blog post',
 }
 
 export enum BlogPostResponseMessage {
   CreatedBlogPost = 'Returns created blog post details in response body',
-  SearchBlogPosts = 'Returns search results in response body',
+  ListBlogPosts = 'Returns blog posts list in response body',
   RePostedBlogPost = 'Blog post was re-posted',
 }
 

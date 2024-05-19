@@ -2,7 +2,7 @@ import { Transform } from 'class-transformer';
 import { IsArray, IsEnum, IsIn, IsMongoId, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-import { PostType, PostTypeValues, SortDirection } from '@project/shared-core';
+import { PostState, PostStateValues, PostType, PostTypeValues, SortDirection } from '@project/shared-core';
 
 import { BlogPostPropertiesDescription, BlogPostQueryDefaults } from '../blog-post.constants';
 import { BlogPostSortByType } from '../blog-port-sort-type.enum';
@@ -76,4 +76,14 @@ export class BlogPostQuery {
     required: false,
   })
   public authorId: string;
+
+  @IsOptional()
+  @IsString()
+  @IsEnum(PostState)
+  @ApiProperty({
+    description: BlogPostPropertiesDescription.QueryPostState,
+    example: PostState.Draft,
+    required: false,
+  })
+  public postState: PostStateValues;
 }

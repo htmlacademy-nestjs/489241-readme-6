@@ -132,6 +132,10 @@ export class BlogPostRepository extends BasePostgresRepository<BlogPostEntity, P
       where.userId = query.authorId;
     }
 
+    if (query?.postState) {
+      where.state = query.postState;
+    }
+
     const [records, postCount] = await Promise.all([
       this.client.post.findMany({ where, orderBy, skip, take,
         include: {

@@ -1,4 +1,4 @@
-import { Inject, Body, Controller, Post, UseFilters, UseGuards, UseInterceptors, ParseUUIDPipe, Param, HttpStatus, HttpCode, Patch, Query, Get, Req, Headers } from '@nestjs/common';
+import { Inject, Body, Controller, Post, UseFilters, UseGuards, UseInterceptors, ParseUUIDPipe, Param, HttpStatus, HttpCode, Patch, Query, Get, Req, Headers, Head } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -42,9 +42,9 @@ export class BlogController {
   }
 
   @Get('/')
-  @ApiOperation({ summary: BlogPostOperationDescription.SearchBlogPosts })
+  @ApiOperation({ summary: BlogPostOperationDescription.ListBlogPosts })
   @ApiOkResponse({
-    description: BlogPostResponseMessage.SearchBlogPosts,
+    description: BlogPostResponseMessage.ListBlogPosts,
     type: BlogPostWithPaginationRdo,
   })
   public async index(@Query() query: BlogPostQuery, @Req() req: Request) {
@@ -54,6 +54,28 @@ export class BlogController {
         params: query,
         headers: {
           'X-Request-Id': req.headers['X-Request-Id'],
+        }
+      }
+    );
+    return data;
+  }
+
+  @Get('/by-user')
+  @ApiOperation({ summary: BlogPostOperationDescription.ListBlogPostsByUser })
+  @ApiOkResponse({
+    description: BlogPostResponseMessage.ListBlogPosts,
+    type: BlogPostWithPaginationRdo,
+  })
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  public async getPostsByUser(@Query() query: BlogPostQuery, @Req() { user }: RequestWithUser, @Headers() headers) {
+    const queryBlogPostsUrl = this.config.getBlogUrl(BlogEndpoints.RootPosts);
+    query.authorId = user.id;
+    const { data } = await this.httpService.axiosRef.get(queryBlogPostsUrl,
+      {
+        params: query,
+        headers: {
+          'X-Request-Id': headers['X-Request-Id'],
         }
       }
     );
