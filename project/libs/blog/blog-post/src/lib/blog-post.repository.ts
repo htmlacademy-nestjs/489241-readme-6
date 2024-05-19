@@ -1,7 +1,8 @@
+import dayjs from 'dayjs';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
-import { PaginationResult, Post } from '@project/shared-core';
+import { PaginationResult, Post, PostState } from '@project/shared-core';
 import { BasePostgresRepository } from '@project/data-access';
 import { PrismaClientService } from '@project/blog-models';
 
@@ -66,6 +67,20 @@ export class BlogPostRepository extends BasePostgresRepository<BlogPostEntity, P
     if (! document) {
       throw new NotFoundException(`Post with id ${id} not found.`);
     }
+
+    return this.createEntityFromDocument(document);
+  }
+
+  public async findByOriginalPostId(id: string): Promise<BlogPostEntity> {
+    const document = await this.client.post.findFirst({
+      where: {
+        originalPostId: id,
+      },
+      include: {
+        categories: true,
+        comments: true,
+      }
+    });
 
     return this.createEntityFromDocument(document);
   }
@@ -150,6 +165,33 @@ export class BlogPostRepository extends BasePostgresRepository<BlogPostEntity, P
       where: { id: entity.id },
       data: { state: pojoEntity.state }
     });
+  }
+
+  public async rePost(entity: BlogPostEntity, userId: string): Promise<BlogPostEntity> {
+    const { id, ...pojoEntity } = entity.toPOJO();
+
+    const record = await this.client.post.create({
+      data: {
+        ...pojoEntity,
+        id: undefined,
+        title: pojoEntity.title,
+        state: PostState.Draft,
+        originalPostId: id,
+        userId,
+        categories: {
+          connect: pojoEntity.categories.map(({ id }) => ({ id }))
+        },
+        comments: {
+          connect: [],
+        }
+      },
+      include: {
+        categories: true,
+        comments: true,
+      }
+    });
+
+    return this.createEntityFromDocument(record);
   }
 
   private setSortPropertyAndDirection(query: BlogPostQuery, orderBy: Prisma.PostOrderByWithRelationInput) {

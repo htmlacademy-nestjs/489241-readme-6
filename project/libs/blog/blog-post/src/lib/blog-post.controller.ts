@@ -105,22 +105,33 @@ export class BlogPostController {
   @Patch('/:postId/like/:userId')
   @ApiOperation({ summary: BlogPostOperationDescription.AddLikeToBlogPost })
   @ApiParam({ name: "postId", required: true, description: BlogPostPropertiesDescription.Id })
+  @ApiParam({ name: "userId", required: true, description: BlogPostPropertiesDescription.UserId })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: BlogPostResponseError.BlogNotFound })
-  public async like(@Param('userId', MongoIdValidationPipe) userId: string, @Param('postId', ParseUUIDPipe) postId: string
-  ) {
-    console.log('like -> user', userId);
+  public async like(@Param('postId', ParseUUIDPipe) postId: string, @Param('userId', MongoIdValidationPipe) userId: string) {
     await this.blogPostService.like(postId, userId);
   }
 
   @Patch('/:postId/publish/:userId')
   @ApiOperation({ summary: BlogPostOperationDescription.PublishBlogPost })
   @ApiParam({ name: "postId", required: true, description: BlogPostPropertiesDescription.Id })
+  @ApiParam({ name: "userId", required: true, description: BlogPostPropertiesDescription.UserId })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: BlogPostResponseError.BlogNotFound })
-  public async publish(@Param('userId', MongoIdValidationPipe) userId: string, @Param('postId', ParseUUIDPipe) postId: string
-  ) {
-    console.log('publish -> user', userId);
+  public async publish(@Param('postId', ParseUUIDPipe) postId: string, @Param('userId', MongoIdValidationPipe) userId: string) {
     await this.blogPostService.publish(postId, userId);
+  }
+
+  @Post('/:postId/repost/:userId')
+  @ApiOperation({ summary: BlogPostOperationDescription.RePostBlogPost })
+  @ApiParam({ name: "postId", required: true, description: BlogPostPropertiesDescription.Id })
+  @ApiParam({ name: "userId", required: true, description: BlogPostPropertiesDescription.UserId })
+  @ApiCreatedResponse({
+    description: BlogPostResponseMessage.RePostedBlogPost,
+    type: CreatePostDto,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: BlogPostResponseError.BlogNotFound })
+  public async rePost(@Param('postId', ParseUUIDPipe) postId: string, @Param('userId', MongoIdValidationPipe) userId: string) {
+    return await this.blogPostService.rePost(postId, userId);
   }
 }

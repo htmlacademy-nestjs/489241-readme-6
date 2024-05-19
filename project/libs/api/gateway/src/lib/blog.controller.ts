@@ -1,4 +1,4 @@
-import { Inject, Body, Controller, Post, UseFilters, UseGuards, UseInterceptors, ParseUUIDPipe, Param, HttpStatus, HttpCode, Patch, Query, Get, Req } from '@nestjs/common';
+import { Inject, Body, Controller, Post, UseFilters, UseGuards, UseInterceptors, ParseUUIDPipe, Param, HttpStatus, HttpCode, Patch, Query, Get, Req, Headers } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -31,9 +31,13 @@ export class BlogController {
   })
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(InjectUserIdInterceptor)
-  public async create(@Body() dto: AddNewPostDto) {
+  public async create(@Body() dto: AddNewPostDto, @Req() req: Request) {
     const createBlogUrl = this.config.getBlogUrl(BlogEndpoints.RootPosts);
-    const { data } = await this.httpService.axiosRef.post(createBlogUrl, dto);
+    const { data } = await this.httpService.axiosRef.post(createBlogUrl, dto, {
+      headers: {
+        'X-Request-Id': req.headers['X-Request-Id'],
+      }
+    });
     return data;
   }
 
@@ -43,12 +47,14 @@ export class BlogController {
     description: BlogPostResponseMessage.SearchBlogPosts,
     type: BlogPostWithPaginationRdo,
   })
-  public async index(@Query() query: BlogPostQuery) {
+  public async index(@Query() query: BlogPostQuery, @Req() req: Request) {
     const queryBlogPostsUrl = this.config.getBlogUrl(BlogEndpoints.RootPosts);
-    console.log('query', query);
     const { data } = await this.httpService.axiosRef.get(queryBlogPostsUrl,
       {
-        params: query
+        params: query,
+        headers: {
+          'X-Request-Id': req.headers['X-Request-Id'],
+        }
       }
     );
     return data;
@@ -62,10 +68,13 @@ export class BlogController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: BlogPostResponseError.UnauthorizedRequest })
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(InjectUserIdInterceptor)
-  public async like(@Req() { user }: RequestWithUser, @Param('postId', ParseUUIDPipe) postId: string
-  ) {
+  public async like(@Req() { user }: RequestWithUser, @Param('postId', ParseUUIDPipe) postId: string, @Headers() headers) {
     const rootBlogPostUrl = this.config.getBlogUrl(BlogEndpoints.RootPosts);
-    await this.httpService.axiosRef.patch(`${rootBlogPostUrl}/${postId}/${BlogEndpoints.LikeBlogPost}/${user.id}`);
+    await this.httpService.axiosRef.patch(`${rootBlogPostUrl}/${postId}/${BlogEndpoints.LikeBlogPost}/${user.id}`, null, {
+      headers: {
+        'X-Request-Id': headers['X-Request-Id'],
+      }
+    });
   }
 
   @Patch('/:postId/publish')
@@ -76,11 +85,35 @@ export class BlogController {
   @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: BlogPostResponseError.UnauthorizedRequest })
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(InjectUserIdInterceptor)
-  public async publish(@Req() { user }: RequestWithUser, @Param('postId', ParseUUIDPipe) postId: string
-  ) {
+  public async publish(@Req() { user }: RequestWithUser, @Param('postId', ParseUUIDPipe) postId: string, @Headers() headers) {
     const rootBlogPostUrl = this.config.getBlogUrl(BlogEndpoints.RootPosts);
     const url = `${rootBlogPostUrl}/${postId}/${BlogEndpoints.PublishBlogPost}/${user.id}`;
-    console.log('PATCH', url);
-    await this.httpService.axiosRef.patch(url);
+    await this.httpService.axiosRef.patch(url, null, {
+      headers: {
+        'X-Request-Id': headers['X-Request-Id'],
+      }
+    });
+  }
+
+  @Post('/:postId/repost')
+  @ApiOperation({ summary: BlogPostOperationDescription.RePostBlogPost })
+  @ApiParam({ name: "postId", required: true, description: BlogPostPropertiesDescription.Id })
+  @ApiCreatedResponse({
+    description: BlogPostResponseMessage.RePostedBlogPost,
+    type: AddNewPostDto,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: BlogPostResponseError.BlogNotFound })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: BlogPostResponseError.UnauthorizedRequest })
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  public async rePost(@Req() { user }: RequestWithUser, @Param('postId', ParseUUIDPipe) postId: string, @Headers() headers) {
+    const rootBlogPostUrl = this.config.getBlogUrl(BlogEndpoints.RootPosts);
+    const url = `${rootBlogPostUrl}/${postId}/${BlogEndpoints.RePostBlogPost}/${user.id}`;
+    const { data } = await this.httpService.axiosRef.post(url, null, {
+      headers: {
+        'X-Request-Id': headers['X-Request-Id'],
+      }
+    });
+    return data;
   }
 }

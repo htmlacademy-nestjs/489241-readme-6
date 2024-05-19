@@ -3,8 +3,10 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
-import { AppModule } from './app/app.module';
 import { AccountConfigurationRegistrationKey, AccountConfigurationPorts } from '@project/account-configuration';
+import { RequestIdInterceptor } from '@project/shared-interceptors';
+
+import { AppModule } from './app/app.module';
 
 // Constants
 const GLOBAL_PREFIX = 'api';
@@ -12,6 +14,7 @@ const GLOBAL_PREFIX = 'api';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix(GLOBAL_PREFIX);
+  app.useGlobalInterceptors(new RequestIdInterceptor());
 
   const config = new DocumentBuilder()
     .setTitle('Account Application')

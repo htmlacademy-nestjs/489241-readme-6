@@ -26,6 +26,7 @@ export enum BlogEndpoints {
   RootPosts = 'posts',
   LikeBlogPost = 'like',
   PublishBlogPost = 'publish',
+  RePostBlogPost = 'repost',
 }
 
 export enum AccountEndpoints {

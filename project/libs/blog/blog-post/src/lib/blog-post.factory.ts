@@ -25,6 +25,7 @@ export class BlogPostFactory implements EntityFactory<BlogPostEntity> {
     entity.type = dto.type;
     entity.likes = [];
     entity.likesCount = 0;
+    entity.originalPostId = null;
 
     return entity;
   }

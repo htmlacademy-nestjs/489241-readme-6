@@ -48,6 +48,7 @@ export enum BlogPostOperationDescription {
   CreateCommentForBlogId = 'Creates blog post comment for specified blog post id',
   AddLikeToBlogPost = 'Adds like to specified blog post',
   PublishBlogPost = 'Publish blog post',
+  RePostBlogPost = 'Re-post blog post',
 }
 
 export enum BlogPostResponseMessage {
@@ -55,10 +56,14 @@ export enum BlogPostResponseMessage {
   CreatedBlogPost = 'Returns created blog post details in response body',
   SearchBlogPosts = 'Returns search results in response body',
   CreateCommentForBlogId = 'Blog comment was created and details returned in response body',
+  RePostedBlogPost = 'Blog post was re-posted',
 }
 
 export enum BlogPostResponseError {
   BlogNotFound = 'Blog post not found',
   UnauthorizedRequest = 'Unauthorized request',
   LikeAllowedForPublishedBlogPost = 'Like is allowed only for Published blog post',
+  AuthorCanNotRePostOwnPost = "Author can not re-post own blog post",
+  RePostAllowedForPublishedBlogPost = 'Re-post is allowed only for Published blog post',
+  AlreadyRePosted = "Blog post already re-posted",
 }

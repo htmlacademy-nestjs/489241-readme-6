@@ -20,11 +20,13 @@ export enum BlogPostOperationDescription {
   AddLikeToBlogPost = 'Adds like to specified blog post',
   SearchBlogPosts = 'Searches blog posts based on search criteria',
   PublishBlogPost = 'Publish blog post',
+  RePostBlogPost = 'Re-post blog post',
 }
 
 export enum BlogPostResponseMessage {
   CreatedBlogPost = 'Returns created blog post details in response body',
   SearchBlogPosts = 'Returns search results in response body',
+  RePostedBlogPost = 'Blog post was re-posted',
 }
 
 export enum BlogPostResponseError {

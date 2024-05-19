@@ -17,4 +17,5 @@ export interface Post {
   comments: Comment[];
   likes?: string[];
   likesCount?: number;
+  originalPostId: string;
 }

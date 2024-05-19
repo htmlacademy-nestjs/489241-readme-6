@@ -30,8 +30,16 @@ GET http://{{host}}/api/posts?categories={{first_category}}&sortDirection=desc&s
 
 ###
 
-PATCH http://{{host}}/api/posts/{{first_post}}/publish?user[id]={{first_post_user}}
+PATCH http://{{host}}/api/posts/{{first_post}}/publish?user[id]={{first_post_user}} HTTP/1.1
 
 ###
 
-PATCH http://{{host}}/api/posts/{{first_post}}/like?user[id]={{first_post_user}}
+PATCH http://{{host}}/api/posts/{{first_post}}/like?user[id]={{first_post_user}} HTTP/1.1
+
+###
+
+POST http://{{host}}/api/posts/952759a5-cc19-4549-9db5-89daaf2fd087/repost/6648c9a2aecee3bc032c2a6e HTTP/1.1
+
+###
+
+GET http://{{host}}/api/posts/952759a5-cc19-4549-9db5-89daaf2fd087 HTTP/1.1

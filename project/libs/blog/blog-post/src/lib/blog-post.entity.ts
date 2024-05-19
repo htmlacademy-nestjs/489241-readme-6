@@ -15,6 +15,7 @@ export class BlogPostEntity extends Entity implements StorableEntity<Post> {
   public type: PostTypeValues;
   public likes?: string[];
   public likesCount?: number;
+  public originalPostId: string;
 
   constructor(post?: Post) {
     super();
@@ -27,6 +28,7 @@ export class BlogPostEntity extends Entity implements StorableEntity<Post> {
     }
 
     this.id = post.id ?? undefined;
+    this.title = post.title;
     this.content = post.content;
     this.createdAt = post.createdAt;
     this.updatedAt = post.updatedAt;
@@ -38,6 +40,7 @@ export class BlogPostEntity extends Entity implements StorableEntity<Post> {
     this.comments = [];
     this.likes = post.likes;
     this.likesCount = post.likesCount;
+    this.originalPostId = post.originalPostId;
 
     const blogCommentFactory = new BlogCommentFactory();
     for (const comment of post.comments) {
@@ -84,7 +87,8 @@ export class BlogPostEntity extends Entity implements StorableEntity<Post> {
       state: this.state,
       type: this.type,
       likes: this.likes,
-      likesCount: this.likesCount
+      likesCount: this.likesCount,
+      originalPostId: this.originalPostId,
     }
   }
 }

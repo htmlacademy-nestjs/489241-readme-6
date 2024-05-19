@@ -122,4 +122,26 @@ export class BlogPostService {
 
     return existsPost;
   }
+
+  public async rePost(postId: string, userId: string): Promise<BlogPostEntity> {
+    const existsPost = await this.getPost(postId);
+    if (!existsPost) {
+      throw new NotFoundException(BlogPostResponseError.BlogNotFound);
+    }
+
+    if (existsPost.userId === userId) {
+      throw new BadRequestException(BlogPostResponseError.AuthorCanNotRePostOwnPost);
+    }
+
+    if (existsPost.state === PostState.Draft) {
+      throw new BadRequestException(BlogPostResponseError.RePostAllowedForPublishedBlogPost);
+    }
+
+    const existsRePost = await this.blogPostRepository.findByOriginalPostId(postId);
+    if (existsRePost) {
+      throw new BadRequestException(BlogPostResponseError.AlreadyRePosted);
+    }
+
+    return await this.blogPostRepository.rePost(existsPost, userId);
+  }
 }
