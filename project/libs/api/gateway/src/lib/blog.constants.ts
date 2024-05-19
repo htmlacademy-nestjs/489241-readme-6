@@ -1,4 +1,5 @@
 export enum BlogPostPropertiesDescription {
+  Id = 'The blog post unique identifier (GUID)',
   Title = 'The blog post title',
   Description = 'The blog post short description',
   Content = 'The blog post content',
@@ -16,8 +17,21 @@ export enum BlogPostValidationMessages {
 
 export enum BlogPostOperationDescription {
   CreateBlogPost = 'Creates blog post',
+  AddLikeToBlogPost = 'Adds like to specified blog post',
+  ListBlogPosts = 'Lists blog posts based on search criteria',
+  ListBlogPostsByUser = 'Lists blog posts for user based on search criteria',
+  PublishBlogPost = 'Publish blog post',
+  RePostBlogPost = 'Re-post blog post',
 }
 
 export enum BlogPostResponseMessage {
   CreatedBlogPost = 'Returns created blog post details in response body',
+  ListBlogPosts = 'Returns blog posts list in response body',
+  RePostedBlogPost = 'Blog post was re-posted',
+}
+
+export enum BlogPostResponseError {
+  BlogNotFound = 'Blog post not found',
+  UnauthorizedRequest = 'Unauthorized request',
+  LikeAllowedForPublishedBlogPost = 'Like is allowed only for Published blog post',
 }

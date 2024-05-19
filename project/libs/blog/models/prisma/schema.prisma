@@ -15,18 +15,21 @@ datasource db {
 }
 
 model Post {
-  id          String     @id @default(uuid())
-  categories  Category[]
-  title       String
-  description String
-  content     String
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime   @updatedAt @map("updated_at")
-  userId      String     @map("user_id")
-  comments    Comment[]
-  favorite    Favorite[]
-  state       PostState  @default(Draft)
-  type        PostType   @default(Text)
+  id             String     @id @default(uuid())
+  categories     Category[]
+  title          String
+  description    String
+  content        String
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+  userId         String     @map("user_id")
+  comments       Comment[]
+  favorite       Favorite[]
+  state          PostState  @default(Draft)
+  type           PostType   @default(Text)
+  likes          String[]   @default([])
+  likesCount     Int        @default(0)
+  originalPostId String?
 
   @@index([title])
   @@map("posts")

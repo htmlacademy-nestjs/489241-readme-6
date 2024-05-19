@@ -40,16 +40,48 @@ GET http://{{blogHost}}/api/categories/ HTTP/1.1
 
 @first_category = {{categories.response.body.$[0].id}}
 
-###
-
+### Create post
+# @name new_post
 POST http://{{host}}/api/blog HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "title": "Проверка!!",
+  "title": "Проверка 25!!",
   "description": "Текст анонса",
   "content": "Расширенный текст публикации",
   "type": "Text",
   "categories": ["{{first_category}}"]
 }
+
+###
+
+@first_post = {{new_post.response.body.$.id}}
+
+###
+
+PATCH http://{{host}}/api/blog/{{first_post}}/publish
+Authorization: Bearer {{access_token}}
+
+###
+
+PATCH http://{{host}}/api/blog/{{first_post}}/like
+Authorization: Bearer {{access_token}}
+###
+# Login as second user by email and password
+# @name login_two
+POST http://{{host}}/api/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "bob.doe@noname.com",
+  "password": "qwaszx@12345"
+}
+
+### Get access token from request above (if was executed)
+@access_token_two = {{login_two.response.body.$.accessToken}}
+
+###
+
+POST http://{{host}}/api/blog/{{first_post}}/repost HTTP/1.1
+Authorization: Bearer {{access_token_two}}

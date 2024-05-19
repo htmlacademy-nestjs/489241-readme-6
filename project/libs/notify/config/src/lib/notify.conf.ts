@@ -5,12 +5,10 @@ import { NotifyConfigurationPorts, NotifyConfigurationRegistrationKey } from './
 import { NotifyEnvironmentConfiguration } from './notify.env'
 
 async function getNotifyConfig(): Promise<NotifyEnvironmentConfiguration> {
-  console.log("2 - get Notify conf - BEGIN");
   const config = plainToClass(NotifyEnvironmentConfiguration, {
     environment: process.env.NOTIFY_ENVIRONMENT,
     port: process.env.NOTIFY_PORT ? parseInt(process.env.NOTIFY_PORT, 10) : NotifyConfigurationPorts.DEFAULT_NOTIFY_PORT,
   });
-  console.log("2 - get Notify conf - END", config);
   await config.validate();
 
   return config;

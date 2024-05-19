@@ -14,5 +14,8 @@ export interface Post {
   updatedAt: Date;
   state: PostStateValues;
   type: PostTypeValues;
-  comments: Comment[]
+  comments: Comment[];
+  likes?: string[];
+  likesCount?: number;
+  originalPostId: string;
 }

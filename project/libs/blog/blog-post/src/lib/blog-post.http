@@ -1,0 +1,45 @@
+@hostname = localhost
+@port = 3002
+@host = {{hostname}}:{{port}}
+
+###
+
+# Get all blog posts
+# @name posts
+GET http://{{host}}/api/posts?sortDirection=desc&sortProperty=createdBy&page=1 HTTP/1.1
+
+###
+
+@first_post = {{posts.response.body.$.entities[0].id}}
+@first_post_user = {{posts.response.body.$.entities[0].userId}}
+
+###
+
+# Get categories into variable
+# @name categories
+
+GET http://{{host}}/api/categories/ HTTP/1.1
+
+###
+
+@first_category = {{categories.response.body.$[0].id}}
+
+# Get all blog posts of first category from previous request
+
+GET http://{{host}}/api/posts?categories={{first_category}}&sortDirection=desc&sortProperty=createdBy&page=1 HTTP/1.1
+
+###
+
+PATCH http://{{host}}/api/posts/{{first_post}}/publish?user[id]={{first_post_user}} HTTP/1.1
+
+###
+
+PATCH http://{{host}}/api/posts/{{first_post}}/like?user[id]={{first_post_user}} HTTP/1.1
+
+###
+
+POST http://{{host}}/api/posts/952759a5-cc19-4549-9db5-89daaf2fd087/repost/6648c9a2aecee3bc032c2a6e HTTP/1.1
+
+###
+
+GET http://{{host}}/api/posts/952759a5-cc19-4549-9db5-89daaf2fd087 HTTP/1.1

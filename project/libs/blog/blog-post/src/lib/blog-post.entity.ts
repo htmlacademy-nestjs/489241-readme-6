@@ -1,5 +1,5 @@
 import { BlogCategoryEntity, BlogCategoryFactory } from '@project/blog-category';
-import { Entity, Post, PostStateValues, PostTypeValues, StorableEntity } from '@project/shared-core';
+import { Entity, Post, PostState, PostStateValues, PostTypeValues, StorableEntity } from '@project/shared-core';
 import { BlogCommentEntity, BlogCommentFactory } from '@project/blog-comment';
 
 export class BlogPostEntity extends Entity implements StorableEntity<Post> {
@@ -13,6 +13,9 @@ export class BlogPostEntity extends Entity implements StorableEntity<Post> {
   public comments: BlogCommentEntity[];
   public state: PostStateValues;
   public type: PostTypeValues;
+  public likes?: string[];
+  public likesCount?: number;
+  public originalPostId: string;
 
   constructor(post?: Post) {
     super();
@@ -25,6 +28,7 @@ export class BlogPostEntity extends Entity implements StorableEntity<Post> {
     }
 
     this.id = post.id ?? undefined;
+    this.title = post.title;
     this.content = post.content;
     this.createdAt = post.createdAt;
     this.updatedAt = post.updatedAt;
@@ -34,6 +38,9 @@ export class BlogPostEntity extends Entity implements StorableEntity<Post> {
     this.type = post.type;
     this.categories = [];
     this.comments = [];
+    this.likes = post.likes;
+    this.likesCount = post.likesCount;
+    this.originalPostId = post.originalPostId;
 
     const blogCommentFactory = new BlogCommentFactory();
     for (const comment of post.comments) {
@@ -45,6 +52,24 @@ export class BlogPostEntity extends Entity implements StorableEntity<Post> {
     for (const category of post.categories) {
       const blogCategoryEntity = blogCategoryFactory.create(category);
       this.categories.push(blogCategoryEntity);
+    }
+  }
+
+  toggleLike(userId: string) {
+    if (this.likes.includes(userId)) {
+      this.likes = this.likes.filter(id => id !== userId);
+    } else {
+      this.likes.push(userId);
+    }
+
+    this.likesCount = this.likes.length;
+  }
+
+  togglePublish() {
+    if (this.state === PostState.Draft) {
+      this.state = PostState.Published;
+    } else {
+      this.state = PostState.Draft;
     }
   }
 
@@ -61,6 +86,9 @@ export class BlogPostEntity extends Entity implements StorableEntity<Post> {
       comments: this.comments.map((commentEntity) => commentEntity.toPOJO()),
       state: this.state,
       type: this.type,
+      likes: this.likes,
+      likesCount: this.likesCount,
+      originalPostId: this.originalPostId,
     }
   }
 }

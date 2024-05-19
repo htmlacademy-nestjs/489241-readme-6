@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
-import { PaginationResult } from '@project/shared-core';
+import { PaginationResult, PostState } from '@project/shared-core';
 import { BlogCategoryService } from '@project/blog-category';
 
 import { BlogPostRepository } from './blog-post.repository';
@@ -86,5 +86,62 @@ export class BlogPostService {
     await this.blogCommentRepository.save(newComment);
 
     return newComment;
+  }
+
+  public async like(postId: string, userId: string) {
+    const existsPost = await this.getPost(postId);
+    if (!existsPost) {
+      throw new NotFoundException(BlogPostResponseError.BlogNotFound);
+    }
+
+    if (existsPost.state !== PostState.Published) {
+      throw new BadRequestException(BlogPostResponseError.LikeAllowedForPublishedBlogPost);
+    }
+
+    existsPost.toggleLike(userId);
+    await this.blogPostRepository.saveChangedLikes(existsPost);
+
+    return existsPost;
+  }
+
+  public async publish(postId: string, userId: string) {
+    const existsPost = await this.getPost(postId);
+    if (!existsPost) {
+      throw new NotFoundException(BlogPostResponseError.BlogNotFound);
+    }
+
+    if (existsPost.state === PostState.Published)
+      return;
+
+    if (existsPost.userId !== userId) {
+      throw new UnauthorizedException(BlogPostResponseError.UnauthorizedRequest);
+    }
+
+    existsPost.togglePublish();
+    await this.blogPostRepository.saveChangedState(existsPost);
+
+    return existsPost;
+  }
+
+  public async rePost(postId: string, userId: string): Promise<BlogPostEntity> {
+    const existsPost = await this.getPost(postId);
+    if (!existsPost) {
+      throw new NotFoundException(BlogPostResponseError.BlogNotFound);
+    }
+
+    if (existsPost.userId === userId) {
+      throw new BadRequestException(BlogPostResponseError.AuthorCanNotRePostOwnPost);
+    }
+
+    if (existsPost.state === PostState.Draft) {
+      throw new BadRequestException(BlogPostResponseError.RePostAllowedForPublishedBlogPost);
+    }
+
+    const existsRePost = await this.blogPostRepository.findByOriginalPostId(postId);
+    if (existsRePost) {
+      throw new BadRequestException(BlogPostResponseError.AlreadyRePosted);
+    }
+
+    return await this.blogPostRepository.rePost(existsPost, userId);
   }
 }

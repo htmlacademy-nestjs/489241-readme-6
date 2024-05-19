@@ -41,10 +41,10 @@ export class UsersController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: UsersErrors.UserNotFound })
   public async refreshToken(@Req() req: Request) {
     const refreshTokensUrl = this.config.getAccountUrl(AccountEndpoints.RefreshTokens);
-    console.log(refreshTokensUrl);
     const { data } = await this.httpService.axiosRef.post(refreshTokensUrl, null, {
       headers: {
-        'Authorization': req.headers['authorization']
+        'Authorization': req.headers['authorization'],
+        'X-Request-Id': req.headers['X-Request-Id'],
       }
     });
 
