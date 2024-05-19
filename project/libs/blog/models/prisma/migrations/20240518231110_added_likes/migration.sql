@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "posts" ADD COLUMN     "likes" TEXT[] DEFAULT ARRAY[]::TEXT[],
+ADD COLUMN     "likesCount" INTEGER NOT NULL DEFAULT 0;

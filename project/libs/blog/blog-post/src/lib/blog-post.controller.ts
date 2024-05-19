@@ -9,9 +9,11 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
-  Query
+  Query,
+  Req,
+  UseGuards
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { fillDto } from '@project/shared-helpers';
 import { CommentRdo, CreateCommentDto } from '@project/blog-comment';
@@ -22,7 +24,9 @@ import { BlogPostQuery } from './dto/blog-post.query';
 import { BlogPostWithPaginationRdo } from './rdo/blog-post-with-pagination.rdo';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { BlogPostOperationDescription, BlogPostResponseError, BlogPostResponseMessage } from './blog-post.constants';
+import { BlogPostOperationDescription, BlogPostPropertiesDescription, BlogPostResponseError, BlogPostResponseMessage } from './blog-post.constants';
+import { JwtAuthGuard, RequestWithUser } from '@project/authentication';
+import { MongoIdValidationPipe } from '@project/pipes';
 
 @ApiTags('blog')
 @Controller('posts')
@@ -96,5 +100,27 @@ export class BlogPostController {
   public async createComment(@Param('postId', ParseUUIDPipe) postId: string, @Body() dto: CreateCommentDto) {
     const newComment = await this.blogPostService.addComment(postId, dto);
     return fillDto(CommentRdo, newComment.toPOJO());
+  }
+
+  @Patch('/:postId/like/:userId')
+  @ApiOperation({ summary: BlogPostOperationDescription.AddLikeToBlogPost })
+  @ApiParam({ name: "postId", required: true, description: BlogPostPropertiesDescription.Id })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: BlogPostResponseError.BlogNotFound })
+  public async like(@Param('userId', MongoIdValidationPipe) userId: string, @Param('postId', ParseUUIDPipe) postId: string
+  ) {
+    console.log('like -> user', userId);
+    await this.blogPostService.like(postId, userId);
+  }
+
+  @Patch('/:postId/publish/:userId')
+  @ApiOperation({ summary: BlogPostOperationDescription.PublishBlogPost })
+  @ApiParam({ name: "postId", required: true, description: BlogPostPropertiesDescription.Id })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: BlogPostResponseError.BlogNotFound })
+  public async publish(@Param('userId', MongoIdValidationPipe) userId: string, @Param('postId', ParseUUIDPipe) postId: string
+  ) {
+    console.log('publish -> user', userId);
+    await this.blogPostService.publish(postId, userId);
   }
 }

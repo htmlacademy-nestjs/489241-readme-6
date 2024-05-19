@@ -27,6 +27,8 @@ model Post {
   favorite    Favorite[]
   state       PostState  @default(Draft)
   type        PostType   @default(Text)
+  likes       String[]   @default([])
+  likesCount  Int        @default(0)
 
   @@index([title])
   @@map("posts")

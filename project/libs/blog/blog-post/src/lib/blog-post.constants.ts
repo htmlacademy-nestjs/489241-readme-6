@@ -11,7 +11,10 @@ export enum BlogPostPropertiesDescription {
   QueryLimit = 'Page size',
   QueryCategories = 'Array of blog categories to filter by',
   QuerySortDirection = 'Sort direction',
-  QueryPageNumber = "Page number"
+  QuerySortProperty = 'Sort property',
+  QueryPageNumber = "Page number",
+  QueryPostType = 'Blog post type',
+  QueryPostAuthor = 'Blog post Author Id'
 }
 
 export enum BlogPostsWithPagingPropertiesDescription {
@@ -43,6 +46,8 @@ export enum BlogPostOperationDescription {
   DeleteBlogPostById = 'Deletes blog post by specified id',
   UpdateBlogPostById = 'Updates blog post by specified id',
   CreateCommentForBlogId = 'Creates blog post comment for specified blog post id',
+  AddLikeToBlogPost = 'Adds like to specified blog post',
+  PublishBlogPost = 'Publish blog post',
 }
 
 export enum BlogPostResponseMessage {
@@ -53,5 +58,7 @@ export enum BlogPostResponseMessage {
 }
 
 export enum BlogPostResponseError {
-  BlogNotFound = 'Blog post not found'
+  BlogNotFound = 'Blog post not found',
+  UnauthorizedRequest = 'Unauthorized request',
+  LikeAllowedForPublishedBlogPost = 'Like is allowed only for Published blog post',
 }

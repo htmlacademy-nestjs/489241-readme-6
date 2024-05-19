@@ -14,6 +14,7 @@ export class BlogPostFactory implements EntityFactory<BlogPostEntity> {
 
   public static createFromCreatePostDto(dto: CreatePostDto, categories: BlogCategoryEntity[]): BlogPostEntity {
     const entity = new BlogPostEntity();
+    entity.id = crypto.randomUUID();
     entity.categories = categories;
     entity.title = dto.title;
     entity.description = dto.description;
@@ -22,6 +23,8 @@ export class BlogPostFactory implements EntityFactory<BlogPostEntity> {
     entity.comments = [];
     entity.state = PostState.Draft;
     entity.type = dto.type;
+    entity.likes = [];
+    entity.likesCount = 0;
 
     return entity;
   }

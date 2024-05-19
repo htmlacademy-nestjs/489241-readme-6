@@ -8,6 +8,7 @@ import { PrismaClientService } from '@project/blog-models';
 import { BlogPostEntity } from './blog-post.entity';
 import { BlogPostFactory } from './blog-post.factory';
 import { BlogPostQuery } from './dto/blog-post.query';
+import { BlogPostSortByType } from './blog-port-sort-type.enum';
 
 @Injectable()
 export class BlogPostRepository extends BasePostgresRepository<BlogPostEntity, Post> {
@@ -105,7 +106,15 @@ export class BlogPostRepository extends BasePostgresRepository<BlogPostEntity, P
     }
 
     if (query?.sortDirection) {
-      orderBy.createdAt = query.sortDirection;
+      this.setSortPropertyAndDirection(query, orderBy);
+    }
+
+    if (query?.type) {
+      where.type = query.type;
+    }
+
+    if (query?.authorId) {
+      where.userId = query.authorId;
     }
 
     const [records, postCount] = await Promise.all([
@@ -126,4 +135,32 @@ export class BlogPostRepository extends BasePostgresRepository<BlogPostEntity, P
       totalItems: postCount,
     }
   }
+
+  public async saveChangedLikes(entity: BlogPostEntity): Promise<void> {
+    const pojoEntity = entity.toPOJO();
+    await this.client.post.update({
+      where: { id: entity.id },
+      data: { likes: pojoEntity.likes, likesCount: pojoEntity.likesCount }
+    });
+  }
+
+  public async saveChangedState(entity: BlogPostEntity): Promise<void> {
+    const pojoEntity = entity.toPOJO();
+    await this.client.post.update({
+      where: { id: entity.id },
+      data: { state: pojoEntity.state }
+    });
+  }
+
+  private setSortPropertyAndDirection(query: BlogPostQuery, orderBy: Prisma.PostOrderByWithRelationInput) {
+    if (query?.sortProperty == BlogPostSortByType.CreatedBy) {
+      orderBy.createdAt = query.sortDirection;
+    } else if (query?.sortProperty == BlogPostSortByType.CommentsCount) {
+      orderBy.comments = { _count: query.sortDirection };
+    } else if (query?.sortProperty == BlogPostSortByType.LikesCount) {
+      orderBy.likesCount = query.sortDirection;
+    }
+  }
 }
+
+

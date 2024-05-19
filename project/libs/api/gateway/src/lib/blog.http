@@ -40,16 +40,30 @@ GET http://{{blogHost}}/api/categories/ HTTP/1.1
 
 @first_category = {{categories.response.body.$[0].id}}
 
-###
-
+### Create post
+# @name new_post
 POST http://{{host}}/api/blog HTTP/1.1
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "title": "Проверка!!",
+  "title": "Проверка 14!!",
   "description": "Текст анонса",
   "content": "Расширенный текст публикации",
   "type": "Text",
   "categories": ["{{first_category}}"]
 }
+
+###
+
+@first_post = {{new_post.response.body.$.id}}
+
+###
+
+PATCH http://{{host}}/api/blog/{{first_post}}/publish
+Authorization: Bearer {{access_token}}
+
+###
+
+PATCH http://{{host}}/api/blog/{{first_post}}/like
+Authorization: Bearer {{access_token}}

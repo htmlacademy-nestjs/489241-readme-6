@@ -23,7 +23,9 @@ export enum ApiConfigurationErrors {
 }
 
 export enum BlogEndpoints {
-  CreateBlogPost = 'posts',
+  RootPosts = 'posts',
+  LikeBlogPost = 'like',
+  PublishBlogPost = 'publish',
 }
 
 export enum AccountEndpoints {
